@@ -1,5 +1,3 @@
-io.stdout\setvbuf("no")
-
 love.load = ->
 
 love.update = (dt) ->

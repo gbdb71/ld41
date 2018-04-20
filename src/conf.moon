@@ -1,18 +1,18 @@
 love.conf = (t) ->
-    export lume = require "lib/lume"
-    export settings = require "settings"
+    export Lume = require "lib/lume"
+    export Settings = require "settings"
 
-    t.author = lume.format("{1}, {2} and {3}", { settings.authors["Luke"], settings.authors["Rey"], "" })
+    t.author = Lume.format("{1}, {2} and {3}", { Settings.authors["Luke"], Settings.authors["Rey"], "" })
     t.url = ""
 
     t.identity = ""                                     -- The name of the save directory (string)
     t.version = "11.1"                                  -- The LÖVE version this game was made for (string)
     t.console = true                                    -- Attach a console (boolean, Windows only)
 
-    t.window.title = settings.title                     -- The window title (string)
+    t.window.title = Settings.title                     -- The window title (string)
     t.window.icon = nil                                 -- Filepath to an image to use as the window's icon (string)
-    t.window.width = settings.window_size.width         -- The window width (number)
-    t.window.height = settings.window_size.height       -- The window height (number)
+    t.window.width = Settings.window_size.width         -- The window width (number)
+    t.window.height = Settings.window_size.height       -- The window height (number)
     t.window.borderless = false                         -- Remove all border visuals from the window (boolean)
     t.window.resizable = false                          -- Let the window be user-resizable (boolean)
     t.window.minwidth = t.window.width                  -- Minimum window width if the window is resizable (number)

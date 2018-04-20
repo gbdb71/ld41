@@ -1,15 +1,19 @@
 love.conf = function(t)
-  lume = require("lib/lume")
-  settings = require("settings")
-  t.author = ""
+  Lume = require("lib/lume")
+  Settings = require("settings")
+  t.author = Lume.format("{1}, {2} and {3}", {
+    Settings.authors["Luke"],
+    Settings.authors["Rey"],
+    ""
+  })
   t.url = ""
   t.identity = ""
   t.version = "11.1"
   t.console = true
-  t.window.title = settings.title
+  t.window.title = Settings.title
   t.window.icon = nil
-  t.window.width = settings.window_size.width
-  t.window.height = settings.window_size.height
+  t.window.width = Settings.window_size.width
+  t.window.height = Settings.window_size.height
   t.window.borderless = false
   t.window.resizable = false
   t.window.minwidth = t.window.width

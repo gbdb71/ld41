@@ -3,7 +3,7 @@ settings.game_name = "LD41"
 settings.description = "Game made in 72 hours to Ludum Dare 41."
 settings.link = "-"
 settings.authors = {
-  ["Lucas A. Miranda"] = {
+  ["Luke"] = {
     role = "programmer",
     links = {
       twitter = "@itsmappache",
@@ -18,10 +18,10 @@ settings.authors = {
     }
   }
 }
-settings.title = lume.format("{1}", {
+settings.title = Lume.format("{1}", {
   settings.game_name
 })
-settings.pixel_scale = 1
+settings.pixel_scale = 4
 settings.screen_size = {
   width = 320,
   height = 180
