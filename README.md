@@ -1,4 +1,4 @@
-# LD 41
+# About
 Game made in 72 hours to Ludum Dare 41
 
 # Using
