@@ -2,7 +2,7 @@ love.conf = (t) ->
     export lume = require "lib/lume"
     export settings = require "settings"
 
-    t.author = ""
+    t.author = lume.format("{1}, {2} and {3}", { settings.authors["Luke"], settings.authors["Rey"], "" })
     t.url = ""
 
     t.identity = ""                                     -- The name of the save directory (string)
