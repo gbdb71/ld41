@@ -1,0 +1,3 @@
+[submodule "lib/lume"]
+	path = lib/lume
+	url = https://github.com/rxi/lume.git
