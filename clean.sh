@@ -5,7 +5,7 @@ clearLuaFiles() {
 
     if [ -n "$luaFiles" ]; then
         echo "Cleanning .lua files from /lua..."
-        rm -f $luaFiles
+        rm -f -r -d $luaFiles
         return $?
     else
         echo "Folder /lua is already cleared"
@@ -19,7 +19,7 @@ clearBinFiles() {
 
     if [ -n "$binFiles" ]; then
         echo "Cleanning bin files from /bin..."
-        rm -f $binFiles
+        rm -f -r -d $binFiles
         return $?
     else
         echo "Folder /bin is already cleared"
