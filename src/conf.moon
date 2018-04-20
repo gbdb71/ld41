@@ -1,8 +1,8 @@
 love.conf = (t) ->
-    export Lume = require "lib/lume"
+    export Lume = require "lib/lume/lume"
     export Settings = require "settings"
 
-    t.author = Lume.format("{1}, {2} and {3}", { Settings.authors["Luke"], Settings.authors["Rey"], "" })
+    t.author = "#{Settings.authors["Luke"]}, #{Settings.authors["Rey"]} and #{""}"
     t.url = ""
 
     t.identity = ""                                     -- The name of the save directory (string)

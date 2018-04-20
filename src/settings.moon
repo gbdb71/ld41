@@ -21,7 +21,7 @@ settings.authors =
     }
 
 -- window
-settings.title = Lume.format("{1}", { settings.game_name })
+settings.title = "#{settings.game_name}"
 settings.pixel_scale = 4
 
 settings.screen_size =
