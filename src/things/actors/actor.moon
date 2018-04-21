@@ -18,7 +18,7 @@ export class Actor extends Entity
 
     draw: =>
         super!
-        love.graphics.rectangle("fill", @movement.targetPosition.x, @movement.targetPosition.y, 1, 1)
+        --love.graphics.rectangle("fill", @movement.targetPosition.x, @movement.targetPosition.y, 1, 1)
 
 
     move: (x, y) =>

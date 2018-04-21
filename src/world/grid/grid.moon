@@ -15,6 +15,9 @@ export class Grid extends Entity
         @tilesets = {}
         @layers = {}
 
+        -- entities
+        @entities = {} -- for reference only
+
     update: (dt) =>
         super(dt)
 
@@ -94,14 +97,26 @@ export class Grid extends Entity
                             for x = 1, layer.columns
                                 tile = layer.tiles[y][x]
                                 @cells[y][x].walkable = (tile == nil)
-                                print x, y, @cells[y][x].walkable
 
                 when "objectgroup"
                     for i, object in pairs l.objects
-                        print "read #{object.type}"
+                        entity = nil
+                        switch object.type
+                            when "Player"
+                                entity = Player!
+                                @scene.player = entity
+                            else
+                                print "Unhandled object with type '#{object.type}' (at x: #{object.x}, y: #{object.y})."
+                                continue
 
+                        entity.x = object.x
+                        entity.y = object.y
+                        entity.visile = object.visible
+                        Lume.push(@entities, entity)
+                        @scene\addEntity(entity)
                 else
                     print "Undefined grid layer type '#{l.type}'."
+                    continue
 
     clear: =>
         Lume.clear(@layers)

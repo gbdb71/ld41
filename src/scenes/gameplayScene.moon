@@ -2,6 +2,13 @@ export class GameplayScene extends Scene
     new: =>
         super!
 
+        -- actors
+        require "things/actors/actor"
+
+        -- player
+        require "things/actors/player/player"
+        @player = nil
+
         -- grid
         require "world/grid/gridCell"
         require "world/grid/gridLayer"
@@ -9,14 +16,6 @@ export class GameplayScene extends Scene
         require "world/grid/grid"
         @grid = Grid!
         @addEntity(@grid)
-
-        -- actors
-        require "things/actors/actor"
-
-        -- player
-        require "things/actors/player/player"
-        @player = Player!
-        @addEntity(@player)
 
     enter: =>
         super!
@@ -64,4 +63,4 @@ export class GameplayScene extends Scene
 
     draw: =>
         super!
-        love.graphics.print(@player.movement\toString!, 10, 10)
+        --love.graphics.print(@player.movement\toString!, 10, 10)

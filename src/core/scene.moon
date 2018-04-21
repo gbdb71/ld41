@@ -16,24 +16,39 @@ export class Scene
         @entities\keep!
 
         for _, entity in ipairs @entities.values
+            if (not entity.active)
+                continue
+
             entity\beforeUpdate!
 
     update: (dt) =>
         for _, entity in ipairs @entities.values
+            if (not entity.active)
+                continue
+
             entity\update(dt)
 
     lateUpdate: =>
         for _, entity in ipairs @entities.values
+            if (not entity.active)
+                continue
+
             entity\lateUpdate!
 
 
     draw: =>
         --for _, graphic in ipairs @graphics.values
+            --if (not graphic.visible)
+                --continue
+
         --    graphic\draw!
 
         for _, entity in ipairs @entities.values
+            if (not entity.visible)
+                continue
+
             entity\draw!
-            
+
 
     addEntity: (entity) =>
         @entities\add(entity)
