@@ -7,6 +7,6 @@ echo ""
 
 if [ "$?" -eq "0" ]; then
     echo ""
-    echo "Running with Löve <3"
+    echo "Running with Löve ❤️"
     love ./lua
 fi
