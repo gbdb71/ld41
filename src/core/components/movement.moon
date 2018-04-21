@@ -8,28 +8,39 @@ export class Movement extends Component
         @nextAxis = x: 0, y: 0
         @snapaxes = true
 
+        -- position
+        @hasTargetPosition = false
+        @targetPosition = x: 0, y: 0
+
         -- velocity
         @velocity = x: 0, y: 0
         @maxVelocity = x: maxVelocityX, y: maxVelocityY
         @targetVelocity = x: 0, y: 0
         @acceleration = x: accelerationX, y: accelerationY
-        @dampening = 6
+
+        -- others
+        @dampening = 10
 
     beforeUpdate: =>
         super!
+
+    update: (dt) =>
+        super(dt)
+
+        if (@hasTargetPosition)
+            angle = Lume.angle(@entity.x, @entity.y, @targetPosition.x, @targetPosition.y)
+            @nextAxis.x, @nextAxis.y = Lume.vector(angle, 1)
+
         if (@axis.x != 0 or @axis.y != 0)
             @lastAxis.x = @axis.x
             @lastAxis.y = @axis.y
 
         @axis.x = @nextAxis.x
         @axis.y = @nextAxis.y
-        @targetVelocity.x = Math.sign(@axis.x) * @maxVelocity.x
-        @targetVelocity.y = Math.sign(@axis.y) * @maxVelocity.x
+        @targetVelocity.x = @axis.x * @maxVelocity.x
+        @targetVelocity.y = @axis.y * @maxVelocity.x
         @nextAxis.x = 0
         @nextAxis.y = 0
-
-    update: (dt) =>
-        super(dt)
 
         -- horizontal
         if (@axis.x == 0)
@@ -39,7 +50,7 @@ export class Movement extends Component
         else
             @velocity.x = Math.approach(@velocity.x, @targetVelocity.x, @acceleration.x * dt)
 
-        @entity.x += @velocity.x * dt
+        displacementX = @velocity.x * dt
 
         -- vertical
         if (@axis.y == 0)
@@ -49,7 +60,31 @@ export class Movement extends Component
         else
             @velocity.y = Math.approach(@velocity.y, @targetVelocity.y, @acceleration.y * dt)
 
-        @entity.y += @velocity.y * dt
+        displacementY = @velocity.y * dt
+
+        -- resolution
+        if (@hasTargetPosition)
+            if (@entity.x != @targetPosition.x)
+                if (@entity.x < @targetPosition.x)
+                    @entity.x = math.min(@entity.x + displacementX, @targetPosition.x)
+                else
+                    @entity.x = math.max(@entity.x + displacementX, @targetPosition.x)
+
+            if (@entity.y != @targetPosition.y)
+                if (@entity.y < @targetPosition.y)
+                    @entity.y = math.min(@entity.y + displacementY, @targetPosition.y)
+                else
+                    @entity.y = math.max(@entity.y + displacementY, @targetPosition.y)
+
+            if (@entity.x == @targetPosition.x and @entity.y == @targetPosition.y)
+                @hasTargetPosition = false
+                @nextAxis.x = 0
+                @nextAxis.y = 0
+                @velocity.x = 0
+                @velocity.y = 0
+        else
+            @entity.x += displacementX
+            @entity.y += displacementY
 
     moveX: (x) =>
         @nextAxis.x = x
@@ -60,6 +95,11 @@ export class Movement extends Component
     move: (x, y) =>
         @moveX(x)
         @moveY(y)
+
+    moveTo: (x, y) =>
+        @hasTargetPosition = true
+        @targetPosition.x = x
+        @targetPosition.y = y
 
     toString: =>
         "axis: #{@axis.x}, #{@axis.y}

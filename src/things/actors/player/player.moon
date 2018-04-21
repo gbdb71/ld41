@@ -1,7 +1,7 @@
-export class Player extends Entity
+export class Player extends Actor
     new: =>
         super!
-        @graphic = Image("content/player.png")
+        @graphic = Image("content/graphics/player.png")
         @movement = @addComponent(Movement(100, 100, 300, 300))
 
     draw: =>

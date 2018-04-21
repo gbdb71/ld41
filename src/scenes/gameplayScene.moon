@@ -10,6 +10,9 @@ export class GameplayScene extends Scene
 
         @addEntity(@grid)
 
+        -- actors
+        require "things/actors/actor"
+
         -- player
         require "things/actors/player/player"
         @player = Player!
@@ -26,14 +29,14 @@ export class GameplayScene extends Scene
         super!
         keyboard = Settings.input.keyboard
         if (love.keyboard.isDown(keyboard["movement"].up))
-            @player.movement\moveY(-1)
+            @player\moveUp!
         else if (love.keyboard.isDown(keyboard["movement"].down))
-            @player.movement\moveY(1)
+            @player\moveDown!
 
         if (love.keyboard.isDown(keyboard["movement"].left))
-            @player.movement\moveX(-1)
+            @player\moveLeft!
         else if (love.keyboard.isDown(keyboard["movement"].right))
-            @player.movement\moveX(1)
+            @player\moveRight!
 
     update: (dt) =>
         super(dt)

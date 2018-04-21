@@ -5,6 +5,8 @@ export class Grid extends Entity
         @columns = 0
         @cell = width: cellWidth, height: cellHeight
         @cells = {}
+        @gridCellGraphic = love.graphics.newImage("content/graphics/cell.png")
+        @gridCellQuad = love.graphics.newQuad(0, 0, 16, 16, @gridCellGraphic\getDimensions!)
         @emptyTile = GridTile!
 
     update: (dt) =>
@@ -12,10 +14,26 @@ export class Grid extends Entity
 
     draw: =>
         super!
-        for y = 1, @rows
-            for x = 1, @columns
+        @gridCellQuad\setViewport(0, 0, @cell.width, @cell.height)
+        for y = 1, @rows - 1
+            for x = 1, @columns - 1
                 pos = x: (x - 1) * @cell.width, y: (y - 1) * @cell.height
-                @cells[y][x]\draw(pos.x, pos.y, @cell.width, @cell.height)
+                love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
+
+        @gridCellQuad\setViewport(16, 0, @cell.width, @cell.height)
+        for x = 1, @columns - 1
+            pos = x: (x - 1) * @cell.width, y: (@rows - 1) * @cell.height
+            love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
+
+        @gridCellQuad\setViewport(32, 0, @cell.width, @cell.height)
+        for y = 1, @rows - 1
+            pos = x: (@columns - 1) * @cell.width, y: (y - 1) * @cell.height
+            love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
+
+        @gridCellQuad\setViewport(48, 0, @cell.width, @cell.height)
+        pos = x: (@columns - 1) * @cell.width, y: (@rows - 1) * @cell.height
+        love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
+
 
     setup: (columns, rows) =>
         Lume.clear(@cells)
