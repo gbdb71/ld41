@@ -1,9 +1,10 @@
-- Scene
+x Scene
+x Entity
 - Input
 - Tween
+- Component
 - Utils
 - Math
-- ECS
 - Atlas
 - Animation
 - Tileset
