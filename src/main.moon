@@ -1,4 +1,8 @@
 love.load = ->
+    Settings.fonts = {
+        "04b03": love.graphics.newFont("content/fonts/04b03.ttf", 8)
+    }
+
     -- util
     m = require "util/math"
     export Math = m

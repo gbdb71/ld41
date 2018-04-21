@@ -16,6 +16,8 @@ export class Game
         -- graphics
         @backgroundColor = Colors.black
         @pixelScale = 1
+        @stdFont = Settings.fonts["04b03"]
+        love.graphics.setFont(@stdFont)
 
         -- canvas
         love.graphics.setDefaultFilter("nearest", "nearest")

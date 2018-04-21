@@ -43,6 +43,14 @@ settings.windowCenter =
 -- assets
 settings.atlasName = "main atlas"
 
+-- fonts
+settings.fonts = {}
+
+-- grid
+settings.tileSize =
+    width: 16
+    height: 16
+
 -- input
 settings.input = {
     keyboard: {
