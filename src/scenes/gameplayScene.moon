@@ -2,6 +2,15 @@ export class GameplayScene extends Scene
     new: =>
         super!
 
+        -- grid
+        require "world/grid/gridTile"
+        require "world/grid/grid"
+        with @grid = Grid(Settings.tileSize.width, Settings.tileSize.height)
+            \setup(10, 10)
+
+        @addEntity(@grid)
+
+        -- player
         require "things/actors/player/player"
         @player = Player!
         @addEntity(@player)
