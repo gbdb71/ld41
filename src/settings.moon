@@ -43,4 +43,30 @@ settings.windowCenter =
 -- assets
 settings.atlasName = "main atlas"
 
+-- input
+settings.input = {
+    keyboard: {
+        -- gameplay
+        "movement": {
+            up: "up"
+            right: "right"
+            down: "down"
+            left: "left"
+        }
+
+        "action": "z"
+        --"pause": [ "return", "escape" ]
+
+        -- ui
+        "menuMove": {
+            up: "up"
+            right: "right"
+            down: "down"
+            left: "left"
+        }
+        "confirm": "z"
+        "cancel": "x"
+    }
+}
+
 return settings

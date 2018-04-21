@@ -4,38 +4,41 @@ export class Scene
         @entities = Locker!
 
     enter: =>
-        for i, entity in ipairs @entities.values
+        for _, entity in ipairs @entities.values
             entity\sceneEnter!
 
     leave: =>
-        for i, entity in ipairs @entities.values
+        for _, entity in ipairs @entities.values
             entity\sceneLeave!
+
 
     beforeUpdate: =>
         @entities\keep!
 
-        for i, entity in ipairs @entities.values
+        for _, entity in ipairs @entities.values
             entity\beforeUpdate!
 
     update: (dt) =>
-        for i, entity in ipairs @entities.values
+        for _, entity in ipairs @entities.values
             entity\update(dt)
 
     lateUpdate: =>
-        for i, entity in ipairs @entities.values
+        for _, entity in ipairs @entities.values
             entity\lateUpdate!
 
+
     draw: =>
-        --for i, graphic in ipairs @graphics.values
+        --for _, graphic in ipairs @graphics.values
         --    graphic\draw!
 
-        for i, entity in ipairs @entities.values
+        for _, entity in ipairs @entities.values
             entity\draw!
+            
 
     addEntity: (entity) =>
         @entities\add(entity)
         entity\sceneAdded(@)
 
     removeEntity: (entity) =>
-        @entities\remove(entity)
-        entity\sceneRemoved!
+        if (@entities\remove(entity))
+            entity\sceneRemoved!

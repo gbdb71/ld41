@@ -29,8 +29,11 @@ export class Locker
 
     remove: (value) =>
         if (@isLocked)
-            Lume.push(@_toRemove, value)
-            return
+            if (@contains(value))
+                Lume.push(@_toRemove, value)
+                return true
+
+            return false
 
         Lume.remove(@values, value)
 
@@ -41,3 +44,12 @@ export class Locker
             return
 
         Lume.clear(@values)
+
+    contains: (value) =>
+        for i, v in ipairs @values
+            if (value == v)
+                return true
+
+        for i, v in ipairs @_toAdd
+            if (value == v)
+                return true

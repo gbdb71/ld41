@@ -1,5 +1,7 @@
 love.load = ->
     -- util
+    m = require "util/math"
+    export Math = m
     require "util/locker"
 
     -- graphics
@@ -9,10 +11,11 @@ love.load = ->
     require "graphics/image"
 
     -- core
+    require "core/components/component"
+    require "core/components/movement"
     require "core/entity"
     require "core/scene"
     require "core/emptyScene"
-    --require "core/input"
 
     -- game scenes
     require "scenes/gameplayScene"
@@ -22,12 +25,14 @@ love.load = ->
         .pixelScale = Settings.pixelScale
 
         -- input
-        --Input!
+        --with input = Input!
+            --\registerKeyboard(Settings.input.keyboard)
+            --\registerGamepad(Settings.input.gamepad)
 
         -- scenes
-        --\addScene("gameplay", GameplayScene!)
+        \addScene("gameplay", GameplayScene!)
 
-        --\start("gameplay")
+        \start("gameplay")
     return
 
 love.update = (dt) ->
@@ -35,7 +40,7 @@ love.update = (dt) ->
     return
 
 love.draw = ->
-    Game.instance\draw()
+    Game.instance\draw!
     return
 
 love.keypressed = (key, scancode, isrepeat) ->
