@@ -2,9 +2,6 @@ export class GameplayScene extends Scene
     new: =>
         super!
 
-    load: =>
-        super!
-
     enter: =>
         super!
 

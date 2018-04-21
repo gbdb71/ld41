@@ -3,15 +3,18 @@ love.load = ->
     require "core/game"
     require "core/scene"
     require "core/emptyScene"
+    --require "core/input"
 
-    -- game initialization
-    Game!
+    with game = Game!
+        -- input
+        love.keyboard.setKeyRepeat true
+        --Input!
 
-    -- scenes
-    require "scenes/gameplayScene"
-    Game.instance\addScene("gameplay", GameplayScene!)
+        -- scenes
+        require "scenes/gameplayScene"
+        game\addScene("gameplay", GameplayScene!)
 
-    Game.instance\start("gameplay")
+        game\start("gameplay")
     return
 
 love.update = (dt) ->
@@ -23,9 +26,7 @@ love.draw = ->
     return
 
 love.keypressed = (key, scancode, isrepeat) ->
-    print(key, scancode, isrepeat)
     return
 
 love.keyreleased = (key, scancode) ->
-    print(key, scancode)
     return

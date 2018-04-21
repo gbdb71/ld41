@@ -1,8 +1,6 @@
 export class Scene
     new: =>
 
-    load: =>
-
     enter: =>
 
     leave: =>

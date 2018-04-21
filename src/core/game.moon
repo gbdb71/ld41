@@ -9,14 +9,9 @@ export class Game
         @scenes = {}
 
     start: (sceneLabel) =>
-        @load!
         @startScene = @getScene(sceneLabel)
         @nextScene = @startScene
         @_updateScene!
-
-    load: =>
-        for label, scene in pairs @scenes
-            scene\load!
 
     update: (dt) =>
         @_updateScene!
