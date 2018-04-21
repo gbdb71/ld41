@@ -10,4 +10,7 @@ fi
 
 if [ "$?" -eq "0" ]; then
     echo "Done!"
+    exit 0
 fi
+
+exit 1
