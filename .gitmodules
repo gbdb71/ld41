@@ -1,3 +1,6 @@
 [submodule "lib/lume"]
 	path = lib/lume
 	url = https://github.com/rxi/lume.git
+[submodule "lib/lua-bit-numberlua"]
+	path = lib/lua-bit-numberlua
+	url = https://github.com/davidm/lua-bit-numberlua.git
