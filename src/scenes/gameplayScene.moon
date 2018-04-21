@@ -3,7 +3,7 @@ export class GameplayScene extends Scene
         super!
 
         -- grid
-        require "world/grid/gridTile"
+        require "world/grid/gridCell"
         require "world/grid/gridLayer"
         require "world/grid/gridTileLayer"
         require "world/grid/grid"
@@ -28,16 +28,35 @@ export class GameplayScene extends Scene
 
     beforeUpdate: =>
         super!
+
+        move = x: 0, y: 0
         keyboard = Settings.input.keyboard
+
         if (love.keyboard.isDown(keyboard["movement"].up))
-            @player\moveUp!
+            move.y = -1
         else if (love.keyboard.isDown(keyboard["movement"].down))
-            @player\moveDown!
+            move.y = 1
 
         if (love.keyboard.isDown(keyboard["movement"].left))
-            @player\moveLeft!
+            move.x = -1
         else if (love.keyboard.isDown(keyboard["movement"].right))
-            @player\moveRight!
+            move.x = 1
+
+        playerGridX, playerGridY = @grid\transformToGridPos(@player.x, @player.y)
+        currentCell = @grid\cellAt(playerGridX, playerGridY)
+
+        -- check if player current tile isn't walkable (impossible situation, but player dies)
+        if (currentCell != nil and not currentCell.walkable)
+            @player\die!
+
+        if (move.x != 0 or move.y != 0)
+            playerNextGridX = playerGridX + move.x
+            playerNextGridY = playerGridY + move.y
+            nextCell = @grid\cellAt(playerNextGridX, playerNextGridY)
+
+            -- check if player next tile is walkable
+            if (nextCell != nil and nextCell.walkable)
+                @player\move(move.x, move.y)
 
     update: (dt) =>
         super(dt)

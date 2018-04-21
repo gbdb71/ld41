@@ -1,3 +1,3 @@
-export class GridTile
+export class GridCell
     new: =>
         @walkable = true

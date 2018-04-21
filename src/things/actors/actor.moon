@@ -41,3 +41,5 @@ export class Actor extends Entity
 
     moveLeft: (tiles=1) =>
         @move(-tiles, 0)
+
+    die: =>

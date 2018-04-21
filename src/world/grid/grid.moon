@@ -10,7 +10,6 @@ export class Grid extends Entity
         @cells = {}
         @gridCellGraphic = love.graphics.newImage("content/graphics/cell.png")
         @gridCellQuad = love.graphics.newQuad(0, 0, 16, 16, @gridCellGraphic\getDimensions!)
-        @emptyTile = GridTile!
 
         -- layers
         @tilesets = {}
@@ -59,7 +58,7 @@ export class Grid extends Entity
         for y = 1, @rows
             @cells[y] = {}
             for x = 1, @columns
-                @cells[y][x] = @emptyTile
+                @cells[y][x] = GridCell!
 
     load: (mapFilename) =>
         @clear!
@@ -89,8 +88,32 @@ export class Grid extends Entity
                     layer\load(l.data, tileset)
 
                     Lume.push(@layers, layer)
+
+                    if (l.properties["collision"])
+                        for y = 1, layer.rows
+                            for x = 1, layer.columns
+                                tile = layer.tiles[y][x]
+                                @cells[y][x].walkable = (tile == nil)
+                                print x, y, @cells[y][x].walkable
+
+                when "objectgroup"
+                    for i, object in pairs l.objects
+                        print "read #{object.type}"
+
                 else
                     print "Undefined grid layer type '#{l.type}'."
 
     clear: =>
         Lume.clear(@layers)
+
+    cellAt: (gridX, gridY) =>
+        if (@cells[gridY] == nil)
+            return nil
+
+        @cells[gridY][gridX]
+
+    transformToGridPos: (x, y) =>
+        ((x - @x) / @cell.width) + 1, ((y - @y) / @cell.height) + 1
+
+    transformToPos: (gridX, gridY) =>
+        @x + gridX * @cell.width, @y + gridY * @cell.height
