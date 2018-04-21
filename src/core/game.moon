@@ -3,10 +3,25 @@ export class Game
 
     new: =>
         @@instance = @
+
+        -- scenes
         @startScene = EmptyScene!
         @scene = @startScene
         @nextScene = nil
         @scenes = {}
+
+        -- input
+        love.keyboard.setKeyRepeat true
+
+        -- graphics
+        @backgroundColor = Colors.Black
+        @pixelScale = 1
+
+        -- canvas
+        love.graphics.setDefaultFilter("nearest", "nearest")
+        @mainCanvas = love.graphics.newCanvas(Settings.screen_size.width, Settings.screen_size.height)
+        @mainCanvas\setFilter("nearest", "nearest")
+
 
     start: (sceneLabel) =>
         @startScene = @getScene(sceneLabel)
@@ -20,7 +35,16 @@ export class Game
         @scene\lateUpdate!
 
     draw: =>
+        love.graphics.setCanvas(@mainCanvas)
+        love.graphics.setColor(@backgroundColor)
+        love.graphics.rectangle("fill", 0, 0, @mainCanvas\getWidth!, @mainCanvas\getHeight!)
+        love.graphics.setColor(Colors.White)
+
         @scene\draw!
+
+        love.graphics.setCanvas!
+        love.graphics.setColor(Colors.White)
+        love.graphics.draw(@mainCanvas, 0, 0, 0, @pixelScale)
 
     addScene: (label, scene) =>
         if (@existsScene(label))

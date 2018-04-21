@@ -2,27 +2,32 @@ love.load = ->
     -- util
     require "util/locker"
 
+    -- graphics
+    local c = require "graphics/color"
+    export Colors = c.Colors
+    require "graphics/graphic"
+    require "graphics/image"
+
     -- core
-    require "core/game"
     require "core/entity"
     require "core/scene"
     require "core/emptyScene"
     --require "core/input"
 
-    -- graphic
-    require "graphics/graphic"
-    require "graphics/image"
+    -- game scenes
+    require "scenes/gameplayScene"
 
+    require "core/game"
     with game = Game!
+        .pixelScale = Settings.pixel_scale
+
         -- input
-        love.keyboard.setKeyRepeat true
         --Input!
 
         -- scenes
-        require "scenes/gameplayScene"
-        game\addScene("gameplay", GameplayScene!)
+        \addScene("gameplay", GameplayScene!)
 
-        game\start("gameplay")
+        \start("gameplay")
     return
 
 love.update = (dt) ->
