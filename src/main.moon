@@ -3,7 +3,7 @@ love.load = ->
     require "util/locker"
 
     -- graphics
-    local c = require "graphics/color"
+    c = require "graphics/color"
     export Colors = c.Colors
     require "graphics/graphic"
     require "graphics/image"
@@ -19,15 +19,15 @@ love.load = ->
 
     require "core/game"
     with game = Game!
-        .pixelScale = Settings.pixel_scale
+        .pixelScale = Settings.pixelScale
 
         -- input
         --Input!
 
         -- scenes
-        \addScene("gameplay", GameplayScene!)
+        --\addScene("gameplay", GameplayScene!)
 
-        \start("gameplay")
+        --\start("gameplay")
     return
 
 love.update = (dt) ->

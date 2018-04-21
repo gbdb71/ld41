@@ -14,12 +14,12 @@ export class Game
         love.keyboard.setKeyRepeat true
 
         -- graphics
-        @backgroundColor = Colors.Black
+        @backgroundColor = Colors.black
         @pixelScale = 1
 
         -- canvas
         love.graphics.setDefaultFilter("nearest", "nearest")
-        @mainCanvas = love.graphics.newCanvas(Settings.screen_size.width, Settings.screen_size.height)
+        @mainCanvas = love.graphics.newCanvas(Settings.screenSize.width, Settings.screenSize.height)
         @mainCanvas\setFilter("nearest", "nearest")
 
 
@@ -38,12 +38,12 @@ export class Game
         love.graphics.setCanvas(@mainCanvas)
         love.graphics.setColor(@backgroundColor)
         love.graphics.rectangle("fill", 0, 0, @mainCanvas\getWidth!, @mainCanvas\getHeight!)
-        love.graphics.setColor(Colors.White)
+        love.graphics.setColor(Colors.white)
 
         @scene\draw!
 
         love.graphics.setCanvas!
-        love.graphics.setColor(Colors.White)
+        love.graphics.setColor(Colors.white)
         love.graphics.draw(@mainCanvas, 0, 0, 0, @pixelScale)
 
     addScene: (label, scene) =>

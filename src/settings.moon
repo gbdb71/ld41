@@ -1,7 +1,7 @@
 settings = {}
 
 -- about
-settings.game_name = "LD41"
+settings.gameName = "LD41"
 settings.description = "Game made in 72 hours to Ludum Dare 41."
 settings.link = "-"
 
@@ -21,26 +21,26 @@ settings.authors =
     }
 
 -- window
-settings.title = "#{settings.game_name}"
-settings.pixel_scale = 4
+settings.title = "#{settings.gameName}"
+settings.pixelScale = 4
 
-settings.screen_size =
+settings.screenSize =
     width: 320
     height: 180
 
-settings.screen_center =
-    x: settings.screen_size.width / 2
-    y: settings.screen_size.height / 2
+settings.screenCenter =
+    x: settings.screenSize.width / 2
+    y: settings.screenSize.height / 2
 
-settings.window_size =
-    width: settings.screen_size.width * settings.pixel_scale
-    height: settings.screen_size.height * settings.pixel_scale
+settings.windowSize =
+    width: settings.screenSize.width * settings.pixelScale
+    height: settings.screenSize.height * settings.pixelScale
 
-settings.window_center =
-    x: settings.window_size.width / 2
-    y: settings.window_size.height / 2
+settings.windowCenter =
+    x: settings.windowSize.width / 2
+    y: settings.windowSize.height / 2
 
 -- assets
-settings.atlas_name = "main atlas"
+settings.atlasName = "main atlas"
 
 return settings
