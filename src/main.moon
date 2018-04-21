@@ -1,7 +1,7 @@
 love.load = ->
     -- util
     require "util/locker"
-    
+
     -- core
     require "core/game"
     require "core/entity"
@@ -9,6 +9,9 @@ love.load = ->
     require "core/emptyScene"
     --require "core/input"
 
+    -- graphic
+    require "graphics/graphic"
+    require "graphics/image"
 
     with game = Game!
         -- input

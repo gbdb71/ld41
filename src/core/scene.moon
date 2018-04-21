@@ -34,3 +34,8 @@ export class Scene
 
     addEntity: (entity) =>
         @entities\add(entity)
+        entity\sceneAdded(@)
+
+    removeEntity: (entity) =>
+        @entities\remove(entity)
+        entity\sceneRemoved!
