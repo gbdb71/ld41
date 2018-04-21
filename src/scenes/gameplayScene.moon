@@ -4,10 +4,10 @@ export class GameplayScene extends Scene
 
         -- grid
         require "world/grid/gridTile"
+        require "world/grid/gridLayer"
+        require "world/grid/gridTileLayer"
         require "world/grid/grid"
-        with @grid = Grid(Settings.tileSize.width, Settings.tileSize.height)
-            \setup(10, 10)
-
+        @grid = Grid!
         @addEntity(@grid)
 
         -- actors
@@ -20,6 +20,7 @@ export class GameplayScene extends Scene
 
     enter: =>
         super!
+        @grid\load("content/maps/test")
 
     leave: =>
         super!
