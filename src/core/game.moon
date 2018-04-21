@@ -15,7 +15,9 @@ export class Game
 
     update: (dt) =>
         @_updateScene!
+        @scene\beforeUpdate!
         @scene\update(dt)
+        @scene\lateUpdate!
 
     draw: =>
         @scene\draw!

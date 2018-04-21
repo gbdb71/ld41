@@ -1,6 +1,9 @@
 export class GameplayScene extends Scene
     new: =>
         super!
+        require "things/actors/player/player"
+        @player = Player!
+        @addEntity(@player)
 
     enter: =>
         super!
