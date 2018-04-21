@@ -10,6 +10,7 @@ export class Grid extends Entity
         @cells = {}
         @gridCellGraphic = love.graphics.newImage("content/graphics/cell.png")
         @gridCellQuad = love.graphics.newQuad(0, 0, 16, 16, @gridCellGraphic\getDimensions!)
+        @cellsOpacity = 1.0
 
         -- layers
         @tilesets = {}
@@ -31,26 +32,37 @@ export class Grid extends Entity
             layer\draw!
 
         -- cells
-        love.graphics.setColor(0, 0, 0, 0)
-        @gridCellQuad\setViewport(0, 0, @cell.width, @cell.height)
-        for y = 1, @rows - 1
-            for x = 1, @columns - 1
-                pos = x: (x - 1) * @cell.width, y: (y - 1) * @cell.height
+        love.graphics.setColor(255, 255, 255, 255 * @cellsOpacity)
+
+        for y = 1, @rows
+            for x = 1, @columns
+                cell = @cellAt(x, y)
+                if (not cell.walkable)
+                    continue
+
+                pos =
+                    x: (x - 1) * @cell.width
+                    y: (y - 1) * @cell.height
+
+                -- prepare grid cell quad
+                eastCell = @cellAt(x + 1, y)
+                southCell = @cellAt(x, y + 1)
+                if (eastCell == nil or not eastCell.walkable)
+                    if (southCell == nil or not southCell.walkable)
+                        --
+                        @gridCellQuad\setViewport(48, 0, @cell.width, @cell.height)
+                    else
+                        -- South
+                        @gridCellQuad\setViewport(32, 0, @cell.width, @cell.height)
+                else
+                    if (southCell == nil or not southCell.walkable)
+                        -- East
+                        @gridCellQuad\setViewport(16, 0, @cell.width, @cell.height)
+                    else
+                        -- East South
+                        @gridCellQuad\setViewport(0, 0, @cell.width, @cell.height)
+
                 love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
-
-        @gridCellQuad\setViewport(16, 0, @cell.width, @cell.height)
-        for x = 1, @columns - 1
-            pos = x: (x - 1) * @cell.width, y: (@rows - 1) * @cell.height
-            love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
-
-        @gridCellQuad\setViewport(32, 0, @cell.width, @cell.height)
-        for y = 1, @rows - 1
-            pos = x: (@columns - 1) * @cell.width, y: (y - 1) * @cell.height
-            love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
-
-        @gridCellQuad\setViewport(48, 0, @cell.width, @cell.height)
-        pos = x: (@columns - 1) * @cell.width, y: (@rows - 1) * @cell.height
-        love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
 
         love.graphics.setColor(255, 255, 255, 255)
 
