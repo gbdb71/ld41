@@ -1,10 +1,10 @@
 x Scene
 x Entity
-- Input
-- Tween
-- Component
-- Utils
-- Math
+x Input
+x Tween
+x Component
+x Utils
+x Math
 - Atlas
 - Animation
 - Tileset

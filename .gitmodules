@@ -4,3 +4,6 @@
 [submodule "lib/lua-bit-numberlua"]
 	path = lib/lua-bit-numberlua
 	url = https://github.com/davidm/lua-bit-numberlua.git
+[submodule "lib/tween-lua"]
+	path = lib/tween-lua
+	url = https://github.com/kikito/tween.lua.git
