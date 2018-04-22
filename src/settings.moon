@@ -41,6 +41,12 @@ settings.windowCenter =
     y: settings.windowSize.height / 2
 
 -- assets
+settings.folders = {}
+settings.folders.content = "content"
+settings.folders.fonts = "#{settings.folders.content}/fonts"
+settings.folders.graphics = "#{settings.folders.content}/graphics"
+settings.folders.maps = "#{settings.folders.content}/maps"
+
 settings.atlasName = "main atlas"
 
 -- fonts

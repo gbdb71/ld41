@@ -19,7 +19,7 @@ export class GameplayScene extends Scene
 
     enter: =>
         super!
-        @grid\load("content/maps/test")
+        @grid\load("#{Settings.folders.maps}/test")
 
     leave: =>
         super!
@@ -27,9 +27,6 @@ export class GameplayScene extends Scene
 
     beforeUpdate: =>
         super!
-
-        if (love.keyboard.isDown("z"))
-            @grid\toggle!
 
         move = x: 0, y: 0
         keyboard = Settings.input.keyboard

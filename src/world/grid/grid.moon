@@ -8,7 +8,7 @@ export class Grid extends Entity
         -- cell
         @cell = width: 0, height: 0
         @cells = {}
-        @gridCellGraphic = love.graphics.newImage("content/graphics/cell.png")
+        @gridCellGraphic = love.graphics.newImage("#{Settings.folders.graphics}/cell.png")
         @gridCellQuad = love.graphics.newQuad(0, 0, 16, 16, @gridCellGraphic\getDimensions!)
         @cellsOpacity = 1.0
 
@@ -98,7 +98,7 @@ export class Grid extends Entity
 
         for i, t in pairs(@_file.tilesets)
             t.tilecount = columns: math.floor(t.imagewidth / t.tilewidth), height: math.floor(t.imageheight / t.tileheight)
-            t.texture = love.graphics.newImage("content/#{string.sub(t.image, 4)}")
+            t.texture = love.graphics.newImage("#{Settings.folders.content}/#{string.sub(t.image, 4)}")
             @tilesets[t.firstgid] = t
 
 
