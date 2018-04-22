@@ -12,6 +12,8 @@ export class Grid extends Entity
         @gridCellQuad = love.graphics.newQuad(0, 0, 16, 16, @gridCellGraphic\getDimensions!)
         @cellsOpacity = 1.0
 
+        @opacityTween = nil
+
         -- layers
         @tilesets = {}
         @layers = {}
@@ -21,6 +23,12 @@ export class Grid extends Entity
 
     update: (dt) =>
         super(dt)
+
+        -- cells
+        if (@opacityTween != nil)
+            complete = @opacityTween\update(dt)
+            if (complete)
+                @opacityTween = nil
 
     draw: =>
         super!
@@ -32,7 +40,8 @@ export class Grid extends Entity
             layer\draw!
 
         -- cells
-        love.graphics.setColor(255, 255, 255, 255 * @cellsOpacity)
+
+        love.graphics.setColor(255, 255, 255, @cellsOpacity)
 
         for y = 1, @rows
             for x = 1, @columns
@@ -63,6 +72,7 @@ export class Grid extends Entity
                         @gridCellQuad\setViewport(0, 0, @cell.width, @cell.height)
 
                 love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
+
 
         love.graphics.setColor(255, 255, 255, 255)
 
@@ -144,3 +154,23 @@ export class Grid extends Entity
 
     transformToPos: (gridX, gridY) =>
         @x + gridX * @cell.width, @y + gridY * @cell.height
+
+    hide: =>
+        if (Math.equalsEstimate(@cellsOpacity, 0) or @opacityTween != nil)
+            return
+
+        @opacityTween = Tween.new(1.0, @, { cellsOpacity: 0.0 }, "outCubic")
+        print "hide"
+
+    show: =>
+        if (Math.equalsEstimate(@cellsOpacity, 100) or @opacityTween != nil)
+            return
+
+        @opacityTween = Tween.new(1.0, @, { cellsOpacity: 1.0 }, "inCubic")
+        print "show"
+
+    toggle: =>
+        if (@cellsOpacity < 1.0)
+            @show!
+        elseif (@cellsOpacity > 0)
+            @hide!

@@ -28,6 +28,9 @@ export class GameplayScene extends Scene
     beforeUpdate: =>
         super!
 
+        if (love.keyboard.isDown("z"))
+            @grid\toggle!
+
         move = x: 0, y: 0
         keyboard = Settings.input.keyboard
 

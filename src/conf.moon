@@ -1,5 +1,6 @@
 love.conf = (t) ->
     export Bit = require "lib/lua-bit-numberlua/lmod/bit/numberlua"
+    export Tween = require "lib/tween-lua/tween"
     export Lume = require "lib/lume/lume"
     export Settings = require "settings"
 
