@@ -1,6 +1,7 @@
 export class Actor extends Entity
     new: =>
         super!
+        @layer = Settings.layers.entity.actors
         @movement = nil
         @isMoving = false
         @moveDirection = x: 0, y: 0

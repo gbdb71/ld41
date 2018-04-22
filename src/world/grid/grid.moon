@@ -2,6 +2,7 @@ export class Grid extends Entity
     new: =>
         super!
 
+        @layer = Settings.layers.entity.scenario
         @rows = 0
         @columns = 0
 

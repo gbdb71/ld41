@@ -11,13 +11,19 @@ export class Entity
 
     sceneAdded: (scene) =>
         @scene = scene
+        @components\lock!
         for _, component in ipairs @components.values
             component\added(@)
 
+        @components\unlock!
+
     sceneRemoved: =>
         @scene = nil
+        @components\lock!
         for _, component in ipairs @components.values
             component\removed!
+
+        @components\unlock!
 
     sceneEnter: =>
 
@@ -25,27 +31,39 @@ export class Entity
 
 
     beforeUpdate: =>
+        @components\lock!
         for _, component in ipairs @components.values
             component\beforeUpdate!
+
+        @components\unlock!
 
     update: (dt) =>
         if (@graphic != nil)
             @graphic\update(dt)
 
+        @components\lock!
         for _, component in ipairs @components.values
             component\update(dt)
 
+        @components\unlock!
+
     lateUpdate: =>
+        @components\lock!
         for _, component in ipairs @components.values
             component\lateUpdate!
+
+        @components\unlock!
 
 
     draw: =>
         if (@graphic != nil)
             @graphic\draw(@x, @y)
 
+        @components\lock!
         for _, component in ipairs @components.values
             component\draw!
+
+        @components\unlock!
 
 
     addComponent: (component) =>
