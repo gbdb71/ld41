@@ -30,6 +30,9 @@ export class Animation extends Image
             return
 
         @currentTrack = @tracks[label]
+        if (forceReset)
+            @currentTrack\reset!
+
         @_updateFrame!
         @isPlaying = true
 

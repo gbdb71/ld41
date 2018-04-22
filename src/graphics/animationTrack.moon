@@ -62,6 +62,12 @@ export class AnimationTrack
 
         return false
 
+    reset: =>
+        @hasEnded = false
+        @clock = 0
+        @currentId = 1
+        @currentFrame = @frames[@currentId]
+
     loop: (looping=true) =>
         @isLooping = looping
         return @

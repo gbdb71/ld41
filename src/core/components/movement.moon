@@ -21,6 +21,13 @@ export class Movement extends Component
         -- others
         @dampening = 10
 
+        -- callbacks
+        @callbacks = {
+            onStartMove: -> return
+            onMoving: -> return
+            onEndMove: -> return
+        }
+
     beforeUpdate: =>
         super!
 
@@ -41,6 +48,11 @@ export class Movement extends Component
         @targetVelocity.y = @axis.y * @maxVelocity.x
         @nextAxis.x = 0
         @nextAxis.y = 0
+
+        -- checks if movement is at resting before movement is applied
+        isResting = false
+        if (Math.equalsEstimate(@velocity.x, 0) and Math.equalsEstimate(@velocity.y, 0))
+            isResting = true
 
         -- horizontal
         if (@axis.x == 0)
@@ -63,18 +75,23 @@ export class Movement extends Component
         displacementY = @velocity.y * dt
 
         -- resolution
+        moved = x: true, y: true
         if (@hasTargetPosition)
             if (@entity.x != @targetPosition.x)
                 if (@entity.x < @targetPosition.x)
                     @entity.x = math.min(@entity.x + displacementX, @targetPosition.x)
                 else
                     @entity.x = math.max(@entity.x + displacementX, @targetPosition.x)
+            else
+                moved.x = false
 
             if (@entity.y != @targetPosition.y)
                 if (@entity.y < @targetPosition.y)
                     @entity.y = math.min(@entity.y + displacementY, @targetPosition.y)
                 else
                     @entity.y = math.max(@entity.y + displacementY, @targetPosition.y)
+            else
+                moved.y = false
 
             if (@entity.x == @targetPosition.x and @entity.y == @targetPosition.y)
                 @hasTargetPosition = false
@@ -82,9 +99,25 @@ export class Movement extends Component
                 @nextAxis.y = 0
                 @velocity.x = 0
                 @velocity.y = 0
+                moved.x = false
+                moved.y = false
         else
             @entity.x += displacementX
             @entity.y += displacementY
+
+        if (displacementX == 0)
+            moved.x = false
+
+        if (displacementY == 0)
+            moved.y = false
+
+        if (moved.x or moved.y)
+            if (isResting)
+                @callbacks.onStartMove!
+
+            @callbacks.onMoving!
+        elseif (not isResting and @velocity.x == 0 and @velocity.y == 0)
+            @callbacks.onEndMove!
 
     moveX: (x) =>
         @nextAxis.x = x

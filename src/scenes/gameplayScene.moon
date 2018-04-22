@@ -6,7 +6,7 @@ export class GameplayScene extends Scene
         require "things/actors/actor"
 
         -- enemies
-        require "things/actors/enemy"
+        require "things/actors/enemies/enemy"
 
         -- player
         require "things/actors/player/player"
@@ -22,12 +22,14 @@ export class GameplayScene extends Scene
         with @turnManager = TurnBasedManager!
             .turnChangeDelay = Settings.turnChangeDelay
             .callbacks.onStartRound = (round) ->
-                @turnManager.canChangeTurn = false
-                @announcer\play("Round #{round} started!", -> @turnManager.canChangeTurn = true)
+                print "start round #{round}"
+                --@turnManager.canChangeTurn = false
+                --@announcer\play("Round #{round} started!", -> @turnManager.canChangeTurn = true)
 
             .callbacks.onEndRound = (round) ->
-                @turnManager.canChangeRound = false
-                @announcer\play("Round #{round} ended", -> @turnManager.canChangeRound = true)
+                print "end round #{round}"
+                --@turnManager.canChangeRound = false
+                --@announcer\play("Round #{round} ended", -> @turnManager.canChangeRound = true)
 
         -- register all turn settings from Settings.turns (on settings.moon)
         for name, turnSettings in pairs Settings.turns
@@ -36,7 +38,12 @@ export class GameplayScene extends Scene
                 .active = turnSettings.active
 
                 .callbacks.onStartTurn = (turn) ->
-                    @announcer\play(turnSettings.messages.startTurn, -> @turnManager.currentTurn\play!)
+                    print turnSettings.messages.startTurn
+                    @turnManager.currentTurn\play!
+                    --@announcer\play(turnSettings.messages.startTurn, -> @turnManager.currentTurn\play!)
+
+                .callbacks.onEndTurn = (turn) ->
+                    print turnSettings.messages.endTurn
 
         -- grid
         require "world/grid/gridCell"
