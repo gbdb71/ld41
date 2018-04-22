@@ -20,6 +20,7 @@ export class GameplayScene extends Scene
     enter: =>
         super!
         @grid\load("#{Settings.folders.maps}/test")
+        print @toString!
 
     leave: =>
         super!

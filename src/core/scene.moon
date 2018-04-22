@@ -1,7 +1,7 @@
 export class Scene
     new: =>
         @graphics = Locker!
-        @entities = Locker!
+        @entities = Locker((a, b) -> a.layer < b.layer)
 
     enter: =>
         for _, entity in ipairs @entities.values
@@ -57,3 +57,8 @@ export class Scene
     removeEntity: (entity) =>
         if (@entities\remove(entity))
             entity\sceneRemoved!
+
+    toString: =>
+        "entities: #{@entities\toString!}
+
+graphics: #{@graphics\toString!}"

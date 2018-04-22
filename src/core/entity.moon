@@ -2,6 +2,7 @@ export class Entity
     new: =>
         @x = 0
         @y = 0
+        @layer = 0
         @visible = true
         @active = true
         @scene = nil

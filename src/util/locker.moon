@@ -1,9 +1,10 @@
 export class Locker
-    new: =>
+    new: (sortFunction) =>
         @isLocked = false
         @values = {}
         @_toAdd = {}
         @_toRemove = {}
+        @sortFunction = sortFunction
 
     keep: =>
         for i, v in ipairs @_toAdd
@@ -13,6 +14,10 @@ export class Locker
         for i, v in ipairs @_toRemove
             Lume.remove(@values, v)
         Lume.clear(@_toRemove)
+
+        -- sort
+        if (@sortFunction != nil)
+            @values = Lume.sort(@values, @sortFunction)
 
     lock: =>
         @isLocked = true
@@ -53,3 +58,13 @@ export class Locker
         for i, v in ipairs @_toAdd
             if (value == v)
                 return true
+
+    count: =>
+        #@values
+
+    toString: =>
+        str = "#{@count!}\n"
+        for i, v in ipairs @values
+            str ..= "  #{i}   #{v.__class.__name}\n"
+
+        return str

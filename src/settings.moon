@@ -83,4 +83,15 @@ settings.input = {
     }
 }
 
+-- entity layers
+settings.layers = {
+    entity: {
+        "ui": 1000
+        "effects": 200
+        "projectiles": 100
+        "actors": 50
+        "scenario": 0
+    }
+}
+
 return settings

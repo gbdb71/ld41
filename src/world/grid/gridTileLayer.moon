@@ -34,7 +34,7 @@ export class GridTileLayer extends GridLayer
                 -- 2  1 -> 4  3
                 -- 4  3 -> 2  1
                 -- sx = sy = -1
-                
+
                 -- h d
                 -- 4  2 -> 2  4
                 -- 3  1 -> 1  3
