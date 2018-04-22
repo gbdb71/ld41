@@ -28,6 +28,9 @@ export class Entity
             component\beforeUpdate!
 
     update: (dt) =>
+        if (@graphic != nil)
+            @graphic\update(dt)
+
         for _, component in ipairs @components.values
             component\update(dt)
 

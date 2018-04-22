@@ -13,6 +13,8 @@ love.load = ->
     export Colors = c.Colors
     require "graphics/graphic"
     require "graphics/image"
+    require "graphics/animation"
+    require "graphics/animationTrack"
 
     -- core
     require "core/components/component"

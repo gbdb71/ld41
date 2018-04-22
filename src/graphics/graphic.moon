@@ -1,6 +1,6 @@
 export class Graphic
     new: =>
-        @drawable = nil
+        @texture = nil
         @x = 0
         @y = 0
         @orientation = 0
@@ -8,8 +8,10 @@ export class Graphic
         @origin = x: 0, y: 0
         @shearing = x: 0, y: 0
 
+    update: (dt) =>
+
     draw: (x=0, y=0, r=@orientation, sx=@scale.x, sy=@scale.y, ox=@origin.x, oy=@origin.y, kx=@shearing.x, ky=@shearing.y) =>
-        if (@drawable == nil)
+        if (@texture == nil)
             return
 
-        love.graphics.draw(@drawable, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
+        love.graphics.draw(@texture, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
