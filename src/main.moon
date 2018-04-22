@@ -10,6 +10,8 @@ love.load = ->
     -- util
     m = require "util/math"
     export Math = m
+    h = require "util/helper"
+    export Helper = h
     require "util/locker"
 
     -- graphics
@@ -17,6 +19,7 @@ love.load = ->
     export Colors = c.Colors
     require "graphics/graphic"
     require "graphics/image"
+    require "graphics/imageSet"
     require "graphics/animation"
     require "graphics/animationTrack"
     require "graphics/text"
@@ -29,6 +32,7 @@ love.load = ->
     require "core/emptyScene"
 
     -- game scenes
+    require "scenes/introScene"
     require "scenes/gameplayScene"
 
     require "core/game"
@@ -41,6 +45,7 @@ love.load = ->
             --\registerGamepad(Settings.input.gamepad)
 
         -- scenes
+        \addScene("intro", IntroScene!)
         \addScene("gameplay", GameplayScene!)
 
         \start("gameplay")

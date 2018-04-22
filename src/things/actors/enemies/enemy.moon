@@ -1,3 +1,3 @@
 export class Enemy extends Actor
-    new: =>
-        super!
+    new: (maxHealth) =>
+        super(maxHealth)

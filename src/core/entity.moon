@@ -9,7 +9,7 @@ export class Entity
         @graphic = nil
         @components = Locker!
 
-        
+
     sceneAdded: (scene) =>
         @scene = scene
         @components\lock!
@@ -77,3 +77,6 @@ export class Entity
     removeComponent: (component) =>
         if (@components\remove(component))
             component\removed(@)
+
+    removeSelf: =>
+        @scene\removeEntity(@)

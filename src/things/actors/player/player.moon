@@ -1,10 +1,10 @@
 export class Player extends Actor
     new: =>
-        super!
-        @graphic = Image("#{Settings.folders.graphics}/player.png")
+        super(2)
+        @damage = 1
         with @graphic = Animation("#{Settings.folders.graphics}/player.png", 17, 24)
-            --.origin.x = 10
-            .origin.y = 7
+            .origin.x = 8
+            .origin.y = 19
             \addTrack("idle", "1-4", 130)\loop()
             \addTrack("jump", "5-7", 130)
             \play("idle")
@@ -13,11 +13,44 @@ export class Player extends Actor
             .callbacks.onStartMove = ->
                 @graphic\play("jump")
 
+            .callbacks.onMoving = ->
+
             .callbacks.onEndMove = ->
                 @graphic\play("idle")
+                @attack!
 
     draw: =>
         super!
+        if (@lastAttackX != nil)
+            love.graphics.rectangle("fill", @lastAttackX - 16, @lastAttackY - 16, 16, 16)
 
 
-    onMoving: =>
+    attack: =>
+        faceX, faceY = Helper.directionToVector(@faceDirection)
+        facingCell = @scene.grid\cellAt(@currentGrid.x + faceX, @currentGrid.y + faceY)
+
+        if (facingCell == nil or facingCell.thing == nil)
+            return false
+
+        @lastAttackX, @lastAttackY = @scene.grid\transformToPos(@currentGrid.x + faceX, @currentGrid.y + faceY)
+
+        print facingCell.thing.__class.__parent.__name
+        switch (facingCell.thing.__class.__parent.__name)
+            when "Enemy"
+                facingCell.thing\takeDamage(@damage)
+                return true
+
+        return false
+
+
+    onCollideThing: (thing) =>
+        switch (thing.__class.__parent.__name)
+            when "Enemy"
+                -- attack
+                @attack!
+                return true
+            --when "Pickup"
+            else
+                print "'#{@@__name}' Collided with a undefined Thing '#{thing.__class.__name}' (parent: '#{thing.__parent.__class.__name}')"
+
+        return false

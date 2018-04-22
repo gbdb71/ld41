@@ -6,14 +6,16 @@ export class Scene
     enter: =>
         @entities\lock!
         for _, entity in ipairs @entities.values
-            entity\sceneEnter!
+            if (entity.scene != @)
+                entity\sceneEnter!
 
         @entities\unlock!
 
     leave: =>
         @entities\lock!
         for _, entity in ipairs @entities.values
-            entity\sceneLeave!
+            if (entity.scene != @)
+                entity\sceneLeave!
 
         @entities\unlock!
 
@@ -22,7 +24,7 @@ export class Scene
 
         @entities\lock!
         for _, entity in ipairs @entities.values
-            if (not entity.active)
+            if (not entity.active or entity.scene != @)
                 continue
 
             entity\beforeUpdate!
@@ -32,7 +34,7 @@ export class Scene
     update: (dt) =>
         @entities\lock!
         for _, entity in ipairs @entities.values
-            if (not entity.active)
+            if (not entity.active or entity.scene != @)
                 continue
 
             entity\update(dt)
@@ -42,7 +44,7 @@ export class Scene
     lateUpdate: =>
         @entities\lock!
         for _, entity in ipairs @entities.values
-            if (not entity.active)
+            if (not entity.active or entity.scene != @)
                 continue
 
             entity\lateUpdate!
@@ -59,7 +61,7 @@ export class Scene
 
         @entities\lock!
         for _, entity in ipairs @entities.values
-            if (not entity.visible)
+            if (not entity.visible or entity.scene != @)
                 continue
 
             entity\draw!

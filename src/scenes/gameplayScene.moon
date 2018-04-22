@@ -7,6 +7,9 @@ export class GameplayScene extends Scene
 
         -- enemies
         require "things/actors/enemies/enemy"
+        require "things/actors/enemies/alienEnemy"
+        require "things/actors/enemies/batEnemy"
+        require "things/actors/enemies/flowerEnemy"
 
         -- player
         require "things/actors/player/player"
@@ -27,9 +30,13 @@ export class GameplayScene extends Scene
                 --@announcer\play("Round #{round} started!", -> @turnManager.canChangeTurn = true)
 
             .callbacks.onEndRound = (round) ->
-                print "end round #{round}"
+                print "end round #{round}\n"
                 --@turnManager.canChangeRound = false
                 --@announcer\play("Round #{round} ended", -> @turnManager.canChangeRound = true)
+
+            .callbacks.onStartTurn = (turn) ->
+                @turnManager.currentTurn\play!
+                --@announcer\play(turnSettings.messages.startTurn, -> @turnManager.currentTurn\play!)
 
         -- register all turn settings from Settings.turns (on settings.moon)
         for name, turnSettings in pairs Settings.turns
@@ -37,13 +44,12 @@ export class GameplayScene extends Scene
                 .name = turnSettings.name
                 .active = turnSettings.active
 
-                .callbacks.onStartTurn = (turn) ->
-                    print turnSettings.messages.startTurn
-                    @turnManager.currentTurn\play!
-                    --@announcer\play(turnSettings.messages.startTurn, -> @turnManager.currentTurn\play!)
+        with playerTurn = @turnManager.turns[Settings.turns.player.id]
+            .callbacks.onStartTurn = (turn) ->
+                @grid\show!
 
-                .callbacks.onEndTurn = (turn) ->
-                    print turnSettings.messages.endTurn
+            .callbacks.onEndTurn = (turn) ->
+                @grid\hide!
 
         -- grid
         require "world/grid/gridCell"
@@ -53,15 +59,17 @@ export class GameplayScene extends Scene
         @grid = Grid!
         @addEntity(@grid)
 
+        -- rooms
+        @canChangeRoom = true
+        @hasRoomEnded = false
+        @changeRoomTimer = 0
+
+        @clock = 0
 
     enter: =>
         super!
-        @grid\load("#{Settings.folders.maps}/test")
-        print @toString!
-
-        @turnManager\start!
-
-        print @turnManager\toString!
+        if (not @grid.isLoaded)
+            @nextRoom("test")
 
     leave: =>
         super!
@@ -76,14 +84,14 @@ export class GameplayScene extends Scene
             move = x: 0, y: 0
             keyboard = Settings.input.keyboard
 
-            if (love.keyboard.isDown(keyboard["movement"].up))
+            if (love.keyboard.isDown(keyboard["movement"].up[1]) or love.keyboard.isDown(keyboard["movement"].up[2]))
                 move.y = -1
-            else if (love.keyboard.isDown(keyboard["movement"].down))
+            else if (love.keyboard.isDown(keyboard["movement"].down[1]) or love.keyboard.isDown(keyboard["movement"].down[2]))
                 move.y = 1
 
-            if (love.keyboard.isDown(keyboard["movement"].left))
+            else if (love.keyboard.isDown(keyboard["movement"].left[1]) or love.keyboard.isDown(keyboard["movement"].left[2]))
                 move.x = -1
-            else if (love.keyboard.isDown(keyboard["movement"].right))
+            else if (love.keyboard.isDown(keyboard["movement"].right[1]) or love.keyboard.isDown(keyboard["movement"].right[2]))
                 move.x = 1
 
             if (move.x != 0 or move.y != 0)
@@ -91,12 +99,28 @@ export class GameplayScene extends Scene
                     @player\finishTurn!
 
     update: (dt) =>
+        @clock += dt
         @turnManager\update(dt)
         super(dt)
         @announcer\update(dt)
 
     lateUpdate: =>
+        super!
         @turnManager\lateUpdate!
+
+        if (@canChangeRoom)
+            if (not @hasRoomEnded)
+                someoneAlive = false
+                for _, enemy in pairs @grid.things.enemies
+                    if (enemy.isAlive)
+                        someoneAlive = true
+                        break
+
+                if (not someoneAlive)
+                    @hasRoomEnded = true
+                    @changeRoomTimer = @clock + Settings.changeRoomDelay
+            elseif (@clock >= @changeRoomTimer)
+                @nextRoom!
 
 
     draw: =>
@@ -104,3 +128,27 @@ export class GameplayScene extends Scene
         @announcer\draw!
 
         --love.graphics.print(@player.movement\toString!, 10, 10)
+
+
+    nextRoom: (roomFilename) =>
+        nextRoomFilename = roomFilename or @grid.properties["nextRoom"]
+        if (nextRoomFilename == nil)
+            @canChangeRoom = false
+            return
+
+        if (@grid.isLoaded)
+            -- remove all entities, added by grid, from the scene
+            for key, entityList in pairs @grid.things
+                for _, entity in ipairs entityList
+                    @removeEntity(entity)
+
+
+        @grid\load("#{Settings.folders.maps}/#{nextRoomFilename}")
+        @turnManager\start!
+        @canChangeRoom = true
+        @hasRoomEnded = false
+        @changeRoomTimer = 0
+
+        -- debug
+        print @toString!
+        print @turnManager\toString!

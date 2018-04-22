@@ -12,6 +12,7 @@ export class Animation extends Image
         @isPlaying = false
 
     update: (dt) =>
+        super(dt)
         if (not @isPlaying or @currentTrack == nil)
             return
 

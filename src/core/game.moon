@@ -36,6 +36,8 @@ export class Game
         @scene\update(dt)
         @scene\lateUpdate!
 
+
+
     draw: =>
         love.graphics.setCanvas(@mainCanvas)
         love.graphics.setColor(@backgroundColor)
@@ -65,6 +67,13 @@ export class Game
     existsScene: (label) =>
         @scenes[label] != nil
 
+    changeScene: (label) =>
+        if (not @existsScene(label))
+            error "Scene with label '#{label}' doesn't exists."
+            return
+
+        @nextScene = @getScene(label)
+
     _updateScene: =>
         if (@nextScene == nil)
             return
@@ -75,10 +84,3 @@ export class Game
         @scene = @nextScene
         @nextScene = nil
         @scene\enter!
-
-    @changeScene: (label) =>
-        if (@@instance\existsScene(label))
-            error "Scene with label '#{label}' doesn't exists."
-            return
-
-        @@instance.nextScene = @@instance\getScene(label)

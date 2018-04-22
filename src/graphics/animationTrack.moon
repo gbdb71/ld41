@@ -40,6 +40,11 @@ export class AnimationTrack
         @currentId = 1
         @currentFrame = @frames[@currentId]
 
+        -- callbacks
+        @callbacks = {
+            onEnd: -> return
+        }
+
     update: (dt) =>
         if (@hasEnded)
             return
@@ -50,6 +55,7 @@ export class AnimationTrack
             @clock = 0
 
             if (@currentId > #@frames)
+                @callbacks.onEnd!
                 if (@isLooping)
                     @currentId = 1
                 else
@@ -70,4 +76,8 @@ export class AnimationTrack
 
     loop: (looping=true) =>
         @isLooping = looping
+        return @
+
+    onEnd: (onEndCallback) =>
+        @callbacks.onEnd = onEndCallback
         return @

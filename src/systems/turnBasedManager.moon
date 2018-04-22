@@ -72,9 +72,32 @@ export class TurnBasedManager
 
 
     start: (turn=1) =>
+        if (@hasStarted)
+            @reset!
+
         @hasStarted = true
         @inTurnTransition = true
         @_updateCurrentTurn(turn)
+
+    reset: =>
+        @hasStarted = false
+
+        -- round
+        @round = 1
+        @isRoundEnded = true
+        @canChangeRound = true
+
+        -- turns
+        @currentTurnId = 0
+        @previousTurn = nil
+        @currentTurn = nil
+        @canChangeTurn = true
+
+        -- turn transition
+        @inTurnTransition = false
+
+        -- turn change delay
+        @turnChangeClock = 0
 
     nextTurn: =>
         if (@inTurnTransition)

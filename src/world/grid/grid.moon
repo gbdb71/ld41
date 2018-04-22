@@ -5,14 +5,17 @@ export class Grid extends Entity
         @layer = Settings.layers.entity.scenario
         @rows = 0
         @columns = 0
+        @properties = {}
+        @isLoaded = false
 
         -- cell
         @cell = width: 0, height: 0
         @cells = {}
         @gridCellGraphic = love.graphics.newImage("#{Settings.folders.graphics}/cell.png")
         @gridCellQuad = love.graphics.newQuad(0, 0, 16, 16, @gridCellGraphic\getDimensions!)
-        @cellsOpacity = 1.0
+        @cellsOpacity = 0.0
 
+        @opacityTweenDir = 0
         @opacityTween = nil
 
         -- layers
@@ -20,7 +23,12 @@ export class Grid extends Entity
         @layers = {}
 
         -- entities
-        @entities = {} -- for reference only
+        -- for reference only
+        @things = {
+            enemies: {}
+            pickups: {}
+        }
+
 
     update: (dt) =>
         super(dt)
@@ -30,6 +38,8 @@ export class Grid extends Entity
             complete = @opacityTween\update(dt)
             if (complete)
                 @opacityTween = nil
+                @opacityTweenDir = 0
+
 
     draw: =>
         super!
@@ -41,8 +51,7 @@ export class Grid extends Entity
             layer\draw!
 
         -- cells
-
-        love.graphics.setColor(255, 255, 255, @cellsOpacity)
+        love.graphics.setColor(1, 1, 1, @cellsOpacity)
 
         for y = 1, @rows
             for x = 1, @columns
@@ -75,7 +84,8 @@ export class Grid extends Entity
                 love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
 
 
-        love.graphics.setColor(255, 255, 255, 255)
+        love.graphics.setColor(1, 1, 1, 1)
+
 
     setup: (columns, rows) =>
         Lume.clear(@cells)
@@ -93,6 +103,9 @@ export class Grid extends Entity
         @cell.width = @_file.tilewidth
         @cell.height = @_file.tilewidth
         @setup(@_file.width, @_file.height)
+
+        -- properties
+        @properties = Lume.clone(@_file.properties)
 
         -- tilesets
         @tilesets = {}
@@ -123,30 +136,60 @@ export class Grid extends Entity
 
                 when "objectgroup"
                     for i, object in pairs l.objects
+                        if (not object.visible)
+                            continue
+
                         entity = nil
-                        switch object.type
-                            when "Player"
-                                entity = Player!
-                                @scene.player = entity
+                        isEnemy = false
+                        alreadyAdded = false
+                        switch string.lower(object.type)
+                            when "player"
+                                if (@scene.player == nil)
+                                    entity = Player!
+                                    @scene.player = entity
+                                else
+                                    entity = @scene.player
+                                    alreadyAdded = true
+
                                 TurnBasedManager.instance.turns[Settings.turns.player.id]\register(entity)
-                            when "Enemy"
-                                print "Enemy not yet implemented."
-                                --entity = Enemy!
-                                --TurnBasedManager.instance.turns[Settings.turns.enemies.id]\register(entity)
+                                print "added Player"
+                            when "alien"
+                                entity = AlienEnemy!
+                                isEnemy = true
+                                print "added AlienEnemy"
+                            when "flower"
+                                entity = FlowerEnemy!
+                                isEnemy = true
+                                print "added FlowerEnemy"
+                            when "bat"
+                                entity = BatEnemy!
+                                isEnemy = true
+                                print "added BatEnemy"
                             else
                                 print "Unhandled object with type '#{object.type}' (at x: #{object.x}, y: #{object.y})."
                                 continue
 
-                        entity.x = object.x
-                        entity.y = object.y
-                        entity.visile = object.visible
-                        Lume.push(@entities, entity)
-                        @scene\addEntity(entity)
+                        if (isEnemy)
+                            Lume.push(@things.enemies, entity)
+                            TurnBasedManager.instance.turns[Settings.turns.enemies.id]\register(entity)
+
+                        entity.x = object.x + math.floor(object.width / 2)
+                        entity.y = object.y + math.floor(object.height / 2)
+                        --entity.visile = object.visible
+                        if (not alreadyAdded)
+                            @scene\addEntity(entity)
                 else
                     print "Undefined grid layer type '#{l.type}'."
                     continue
 
+        @isLoaded = true
+
     clear: =>
+        Lume.clear(@properties)
+
+        for k, v in pairs @things
+            Lume.clear(v)
+
         Lume.clear(@layers)
 
     cellAt: (gridX, gridY) =>
@@ -156,25 +199,27 @@ export class Grid extends Entity
         @cells[gridY][gridX]
 
     transformToGridPos: (x, y) =>
-        ((x - @x) / @cell.width) + 1, ((y - @y) / @cell.height) + 1
+        math.floor((x - @x) / @cell.width) + 1, math.floor((y - @y) / @cell.height) + 1
 
     transformToPos: (gridX, gridY) =>
         @x + gridX * @cell.width, @y + gridY * @cell.height
 
     hide: =>
-        if (Math.equalsEstimate(@cellsOpacity, 0) or @opacityTween != nil)
+        if (@opacityTweenDir == -1)
             return
 
-        @opacityTween = Tween.new(1.0, @, { cellsOpacity: 0.0 }, "outCubic")
+        @opacityTween = Tween.new(.8, @, { cellsOpacity: 0.0 }, "outCubic")
+        @opacityTweenDir = -1
 
     show: =>
-        if (Math.equalsEstimate(@cellsOpacity, 100) or @opacityTween != nil)
+        if (@opacityTweenDir == 1)
             return
 
-        @opacityTween = Tween.new(1.0, @, { cellsOpacity: 1.0 }, "inCubic")
+        @opacityTween = Tween.new(.8, @, { cellsOpacity: 1.0 }, "inCubic")
+        @opacityTweenDir = 1
 
     toggle: =>
-        if (@cellsOpacity < 1.0)
+        if (@opacityTweenDir <= 0)
             @show!
-        elseif (@cellsOpacity > 0)
+        elseif (@opacityTweenDir > 0)
             @hide!

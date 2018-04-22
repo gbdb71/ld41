@@ -64,10 +64,10 @@ settings.input = {
     keyboard: {
         -- gameplay
         "movement": {
-            up: "up"
-            right: "right"
-            down: "down"
-            left: "left"
+            up: { "up", "w" }
+            right: { "right", "d" }
+            down: { "down", "s" }
+            left: { "left", "a" }
         }
 
         "action": "z"
@@ -97,26 +97,20 @@ settings.layers = {
 }
 
 -- turns
-settings.turnChangeDelay = .4
+settings.turnChangeDelay = .2
 settings.turns = {
     player:
         id: 1
         name: "Player"
         active: true
-        messages: {
-            startTurn: "Player turn has started!!!"
-            endTurn: "Player turn has ended."
-        }
 
     enemies:
         id: 2
         name: "Enemies"
         active: false
-        messages: {
-            startTurn: "Enemies turn has begun"
-            endTurn: "Enemies turn has ended."
-        }
 }
 
+-- rooms
+settings.changeRoomDelay = 2
 
 return settings
