@@ -128,6 +128,11 @@ export class Grid extends Entity
                             when "Player"
                                 entity = Player!
                                 @scene.player = entity
+                                TurnBasedManager.instance.turns[Settings.turns.player.id]\register(entity)
+                            when "Enemy"
+                                print "Enemy not yet implemented."
+                                --entity = Enemy!
+                                --TurnBasedManager.instance.turns[Settings.turns.enemies.id]\register(entity)
                             else
                                 print "Unhandled object with type '#{object.type}' (at x: #{object.x}, y: #{object.y})."
                                 continue

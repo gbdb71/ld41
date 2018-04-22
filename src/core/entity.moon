@@ -9,6 +9,7 @@ export class Entity
         @graphic = nil
         @components = Locker!
 
+        
     sceneAdded: (scene) =>
         @scene = scene
         @components\lock!
