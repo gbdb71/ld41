@@ -9,16 +9,22 @@ export class GameplayScene extends Scene
         require "things/actors/player/player"
         @player = nil
 
+        -- announcer
+        require "systems/announcer"
+        @announcer = Announcer(Settings.screenCenter.x, -50)
+
         -- turn based manager
         require "systems/turn"
         require "systems/turnBasedManager"
         with @turnManager = TurnBasedManager!
             .turnChangeDelay = Settings.turnChangeDelay
             .callbacks.onStartRound = (round) ->
-                print "Round #{round} started!"
+                @turnManager.canChangeTurn = false
+                @announcer\play("Round #{round} started!", -> @turnManager.canChangeTurn = true)
 
             .callbacks.onEndRound = (round) ->
-                print "Round #{round} ended"
+                @turnManager.canChangeRound = false
+                @announcer\play("Round #{round} ended", -> @turnManager.canChangeRound = true)
 
         -- register all turn settings from Settings.turns (on settings.moon)
         for name, turnSettings in pairs Settings.turns
@@ -76,6 +82,7 @@ export class GameplayScene extends Scene
     update: (dt) =>
         @turnManager\update(dt)
         super(dt)
+        @announcer\update(dt)
 
     lateUpdate: =>
         @turnManager\lateUpdate!
@@ -83,4 +90,6 @@ export class GameplayScene extends Scene
 
     draw: =>
         super!
+        @announcer\draw!
+
         --love.graphics.print(@player.movement\toString!, 10, 10)

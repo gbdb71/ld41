@@ -16,7 +16,7 @@ export class Game
         -- graphics
         @backgroundColor = Colors.black
         @pixelScale = 1
-        @stdFont = Settings.fonts["04b03"]
+        @stdFont = Settings.stdFont
         love.graphics.setFont(@stdFont)
 
         -- canvas

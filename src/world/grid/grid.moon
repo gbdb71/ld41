@@ -166,14 +166,12 @@ export class Grid extends Entity
             return
 
         @opacityTween = Tween.new(1.0, @, { cellsOpacity: 0.0 }, "outCubic")
-        print "hide"
 
     show: =>
         if (Math.equalsEstimate(@cellsOpacity, 100) or @opacityTween != nil)
             return
 
         @opacityTween = Tween.new(1.0, @, { cellsOpacity: 1.0 }, "inCubic")
-        print "show"
 
     toggle: =>
         if (@cellsOpacity < 1.0)

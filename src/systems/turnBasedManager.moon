@@ -7,12 +7,15 @@ export class TurnBasedManager
 
         -- round
         @round = 1
+        @isRoundEnded = true
+        @canChangeRound = true
 
         -- turns
         @turns = {}
         @currentTurnId = 0
         @previousTurn = nil
         @currentTurn = nil
+        @canChangeTurn = true
 
         -- turn transition
         @inTurnTransition = false
@@ -25,6 +28,8 @@ export class TurnBasedManager
         @callbacks = {
             onStartRound: (round) -> return round
             onEndRound: (round) -> return round
+            onStartTurn: (turn) -> return turn.id
+            onEndTurn: (turn) -> return turn.id
         }
 
 
@@ -32,26 +37,39 @@ export class TurnBasedManager
         if (not @hasStarted)
             return
 
-        if (@currentTurn != nil)
+        if (@currentTurn != nil and @currentTurn.isPlaying)
             @currentTurn\update(dt)
 
         if (@inTurnTransition)
-            @turnChangeClock -= dt
+            @turnChangeClock = math.max(0, @turnChangeClock - dt)
+
+            -- if can change turn
             if (@turnChangeClock <= 0)
+                -- holds round change
+                if (@isRoundEnded)
+                    if (@canChangeRound)
+                        @callbacks.onStartRound(@round)
+                        @isRoundEnded = false
+                    else
+                        return
+
+                -- holds turn change
+                if (not @canChangeTurn)
+                    return
+
                 @turnChangeClock = 0
                 @inTurnTransition = false
 
-                if (@previousTurn == nil or (@previousTurn.id == #@turns and @currentTurn.id == 1))
-                    @callbacks.onStartRound(@round)
-
+                @callbacks.onStartTurn(@currentTurn)
                 @currentTurn\startTurn!
 
     lateUpdate: =>
         if (not @hasStarted)
             return
 
-        if (@currentTurn\hasEnded!)
+        if (not @currentTurn.isPlaying and not @inTurnTransition)
             @nextTurn!
+
 
     start: (turn=1) =>
         @hasStarted = true
@@ -87,10 +105,12 @@ export class TurnBasedManager
 
         @previousTurn = @currentTurn
         if (@previousTurn != nil)
+            @callbacks.onEndTurn(@previousTurn)
             @previousTurn\endTurn!
 
             if (@previousTurn.id > turn)
                 @callbacks.onEndRound(@round)
+                @isRoundEnded = true
                 @round += 1
 
         @currentTurnId = turn

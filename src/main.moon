@@ -1,7 +1,11 @@
 love.load = ->
+    -- font
     Settings.fonts = {
-        "04b03": love.graphics.newFont("#{Settings.folders.fonts}/04b03.ttf", 8)
+        "04b03": "#{Settings.folders.fonts}/04b03.ttf"
     }
+
+    Settings.stdFont = love.graphics.newFont(Settings.fonts["04b03"], 8)
+    Settings.turnAnnouncerFont = love.graphics.newFont(Settings.fonts["04b03"], 16)
 
     -- util
     m = require "util/math"
@@ -15,6 +19,7 @@ love.load = ->
     require "graphics/image"
     require "graphics/animation"
     require "graphics/animationTrack"
+    require "graphics/text"
 
     -- core
     require "core/components/component"

@@ -51,6 +51,8 @@ settings.atlasName = "main atlas"
 
 -- fonts
 settings.fonts = {}
+settings.stdFont = nil
+settings.turnAnnouncerFont = nil
 
 -- grid
 settings.tileSize =
