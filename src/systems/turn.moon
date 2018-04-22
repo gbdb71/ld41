@@ -5,6 +5,7 @@ export class Turn
         @active = active
         @things = {}
         @isPlaying = false
+        @hasEnded = true
 
         -- callbacks
         @callbacks = {
@@ -14,7 +15,7 @@ export class Turn
 
 
     update: (dt) =>
-        if (not @isPlaying)
+        if (not @isPlaying or @hasEnded)
             return
 
         for _, thing in ipairs @things
@@ -27,20 +28,25 @@ export class Turn
                 turnEnded = false
                 break
 
-        @isPlaying = (not turnEnded)
+        @hasEnded = turnEnded
+        @isPlaying = (not @hasEnded)
 
     startTurn: =>
-        @isPlaying = true
+        @hasEnded = false
         @callbacks.onStartTurn(@)
-        for _, thing in ipairs @things
-            thing.hasEndedTurn = false
-            thing\startTurn(@)
 
     endTurn: =>
+        @hasEnded = true
         @isPlaying = false
         @callbacks.onEndTurn(@)
         for _, thing in ipairs @things
             thing\endTurn(@)
+
+    play: =>
+        @isPlaying = true
+        for _, thing in ipairs @things
+            thing.hasEndedTurn = false
+            thing\startTurn(@)
 
     register: (thing) =>
         Lume.push(@things, thing)

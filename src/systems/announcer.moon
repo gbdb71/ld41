@@ -12,9 +12,9 @@ export class Announcer
         @effects = {
             in:
                 tween: Tween.new(
-                    1.5
+                    .9
                     @text
-                    { y: Settings.screenCenter.y }
+                    { y: Settings.screenCenter.y - 32 }
                     "outCubic"
                 )
 
@@ -22,10 +22,10 @@ export class Announcer
 
             out:
                 tween: Tween.new(
-                    1.5
+                    .7
                     @text
                     { opacity: 0.0 }
-                    "outCubic"
+                    "inQuad"
                 )
         }
 
@@ -60,7 +60,11 @@ export class Announcer
 
         @playing = true
         @currentEffect = @effects[@startEffect]
-        @text.text\set(text)
+        @text.text\set({
+            { Lume.color("rgba(61, 0, 122, 1)") }
+            text
+        })
+        @text.x = @startX - @text.text\getWidth! / 2
         @callbacks.onEnd = onEnd
 
     stop: =>

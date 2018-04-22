@@ -37,7 +37,7 @@ export class TurnBasedManager
         if (not @hasStarted)
             return
 
-        if (@currentTurn != nil and @currentTurn.isPlaying)
+        if (@currentTurn != nil)
             @currentTurn\update(dt)
 
         if (@inTurnTransition)
@@ -67,7 +67,7 @@ export class TurnBasedManager
         if (not @hasStarted)
             return
 
-        if (not @currentTurn.isPlaying and not @inTurnTransition)
+        if (@currentTurn.hasEnded)
             @nextTurn!
 
 

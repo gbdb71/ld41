@@ -103,21 +103,19 @@ settings.turns = {
         id: 1
         name: "Player"
         active: true
-        onStartTurn: (turn) ->
-            print "Player turn has started!!!"
-
-        onEndTurn: (turn) ->
-            print "Player turn has ended."
+        messages: {
+            startTurn: "Player turn has started!!!"
+            endTurn: "Player turn has ended."
+        }
 
     enemies:
         id: 2
         name: "Enemies"
         active: false
-        onStartTurn: (turn) ->
-            print "Enemies turn has begun"
-
-        onEndTurn: (turn) ->
-            print "Enemies turn has ended."
+        messages: {
+            startTurn: "Enemies turn has begun"
+            endTurn: "Enemies turn has ended."
+        }
 }
 
 

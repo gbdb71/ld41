@@ -5,6 +5,9 @@ export class GameplayScene extends Scene
         -- actors
         require "things/actors/actor"
 
+        -- enemies
+        require "things/actors/enemy"
+
         -- player
         require "things/actors/player/player"
         @player = nil
@@ -31,8 +34,9 @@ export class GameplayScene extends Scene
             with turn = @turnManager\addTurn(Turn!)
                 .name = turnSettings.name
                 .active = turnSettings.active
-                .callbacks.onStartTurn = turnSettings.onStartTurn
-                .callbacks.onEndTurn = turnSettings.onEndTurn
+
+                .callbacks.onStartTurn = (turn) ->
+                    @announcer\play(turnSettings.messages.startTurn, -> @turnManager.currentTurn\play!)
 
         -- grid
         require "world/grid/gridCell"
