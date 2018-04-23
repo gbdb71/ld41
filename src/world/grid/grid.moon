@@ -48,7 +48,7 @@ export class Grid extends Entity
 
         -- layers
         for i, layer in pairs @layers
-            layer\draw!
+            layer\draw(@x, @y)
 
         -- cells
         love.graphics.setColor(1, 1, 1, @cellsOpacity)
@@ -81,7 +81,7 @@ export class Grid extends Entity
                         -- East South
                         @gridCellQuad\setViewport(0, 0, @cell.width, @cell.height)
 
-                love.graphics.draw(@gridCellGraphic, @gridCellQuad, pos.x, pos.y)
+                love.graphics.draw(@gridCellGraphic, @gridCellQuad, @x + pos.x, @y + pos.y)
 
 
         love.graphics.setColor(1, 1, 1, 1)
@@ -103,6 +103,14 @@ export class Grid extends Entity
         @cell.width = @_file.tilewidth
         @cell.height = @_file.tilewidth
         @setup(@_file.width, @_file.height)
+
+        -- centralize grid
+        size =
+            width: @cell.width * @columns
+            height: @cell.height * @rows
+
+        @x = Settings.screenCenter.x - size.width / 2
+        @y = Settings.screenCenter.y - size.height / 2
 
         -- properties
         @properties = Lume.clone(@_file.properties)
@@ -173,8 +181,8 @@ export class Grid extends Entity
                             Lume.push(@things.enemies, entity)
                             TurnBasedManager.instance.turns[Settings.turns.enemies.id]\register(entity)
 
-                        entity.x = object.x + math.floor(object.width / 2)
-                        entity.y = object.y + math.floor(object.height / 2)
+                        entity.x = @x + object.x + math.floor(object.width / 2)
+                        entity.y = @y + object.y + math.floor(object.height / 2)
                         --entity.visile = object.visible
                         if (not alreadyAdded)
                             @scene\addEntity(entity)

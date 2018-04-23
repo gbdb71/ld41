@@ -15,6 +15,11 @@ export class ImageSet extends Image
         @clock = 0
         @frameDuration = 0
 
+        -- callbacks
+        @callbacks = {
+            onEnd: -> return
+        }
+
     update: (dt) =>
         super(dt)
         if (not @isPlaying)
@@ -28,9 +33,11 @@ export class ImageSet extends Image
             if (@currentFrameId > @totalFrames)
                 if (@isLooping)
                     @currentFrameId = 1
+                    @callbacks.onEnd!
                     return true
                 else
                     @stop!
+                    @callbacks.onEnd!
                     return true
 
             @_updateFrame!
@@ -39,9 +46,11 @@ export class ImageSet extends Image
 
 
     play: (forceReset=true) =>
+        if (forceReset)
+            @currentFrameId = 1
+            @clock = 0
+
         @isPlaying = true
-        @currentFrameId = 1
-        @clock = 0
         @_updateFrame!
 
     stop: =>

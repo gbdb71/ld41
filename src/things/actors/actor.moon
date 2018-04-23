@@ -3,7 +3,7 @@ export class Actor extends Entity
         super!
         @layer = Settings.layers.entity.actors
 
-        @faceDirection = "right"
+        @faceDirection = "left"
 
         -- health
         @maxHealth = maxHealth

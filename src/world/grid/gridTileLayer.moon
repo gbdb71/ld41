@@ -13,7 +13,7 @@ export class GridTileLayer extends GridLayer
         @setup(columns, rows)
 
 
-    draw: =>
+    draw: (topLeftX, topLeftY) =>
         super!
         for y = 1, @rows
             for x = 1, @columns
@@ -75,8 +75,8 @@ export class GridTileLayer extends GridLayer
                 love.graphics.draw(
                     @texture
                     tile.quad
-                    @x + (x - .5) * @cell.width
-                    @y + (y - .5) * @cell.height
+                    topLeftX + @x + (x - .5) * @cell.width
+                    topLeftY + @y + (y - .5) * @cell.height
                     rotation
                     scale.x, scale.y,
                     @cell.width / 2, @cell.height / 2

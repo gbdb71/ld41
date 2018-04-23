@@ -23,6 +23,7 @@ settings.authors =
 -- window
 settings.title = "#{settings.gameName}"
 settings.pixelScale = 4
+settings.backgroundColor = { Lume.color("#372538") }
 
 settings.screenSize =
     width: 320

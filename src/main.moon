@@ -38,6 +38,7 @@ love.load = ->
     require "core/game"
     with game = Game!
         .pixelScale = Settings.pixelScale
+        .backgroundColor = Settings.backgroundColor
 
         -- input
         --with input = Input!

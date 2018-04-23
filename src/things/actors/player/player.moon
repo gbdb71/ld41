@@ -9,6 +9,10 @@ export class Player extends Actor
             \addTrack("jump", "5-7", 130)
             \play("idle")
 
+        with @attackGraphic = ImageSet("#{Settings.folders.graphics}/player_attack.png", 22, 22)
+            .frameDuration = .050
+            .callbacks.onEnd = -> @attackedEnemy\takeDamage(@damage)
+
         with @movement = @addComponent(Movement(100, 100, 300, 300))
             .callbacks.onStartMove = ->
                 @graphic\play("jump")
@@ -19,10 +23,24 @@ export class Player extends Actor
                 @graphic\play("idle")
                 @attack!
 
+        @attackedEnemy = nil
+
+
+    update: (dt) =>
+        super(dt)
+        if (@attackGraphic.isPlaying)
+            @attackGraphic\update(dt)
+
     draw: =>
         super!
-        if (@lastAttackX != nil)
-            love.graphics.rectangle("fill", @lastAttackX - 16, @lastAttackY - 16, 16, 16)
+        --if (@lastAttackX != nil)
+        --    love.graphics.rectangle("fill", @lastAttackX - 16, @lastAttackY - 16, 16, 16)
+
+        if (@attackGraphic.isPlaying)
+            if (@graphic.flip.h)
+                @attackGraphic\draw(@x - 3, @y - 15)
+            else
+                @attackGraphic\draw(@x + 3, @y - 15)
 
 
     attack: =>
@@ -32,12 +50,13 @@ export class Player extends Actor
         if (facingCell == nil or facingCell.thing == nil)
             return false
 
-        @lastAttackX, @lastAttackY = @scene.grid\transformToPos(@currentGrid.x + faceX, @currentGrid.y + faceY)
+        --@lastAttackX, @lastAttackY = @scene.grid\transformToPos(@currentGrid.x + faceX, @currentGrid.y + faceY)
 
-        print facingCell.thing.__class.__parent.__name
         switch (facingCell.thing.__class.__parent.__name)
             when "Enemy"
-                facingCell.thing\takeDamage(@damage)
+                --facingCell.thing\takeDamage(@damage)
+                @attackedEnemy = facingCell.thing
+                @attackGraphic\play!
                 return true
 
         return false
