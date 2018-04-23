@@ -1,6 +1,6 @@
 export class Player extends Actor
     new: =>
-        super(2)
+        super(3)
         @damage = 1
         with @graphic = Animation("#{Settings.folders.graphics}/player.png", 17, 24)
             .origin.x = 8

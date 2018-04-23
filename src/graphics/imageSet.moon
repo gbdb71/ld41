@@ -56,7 +56,13 @@ export class ImageSet extends Image
     stop: =>
         @isPlaying = false
 
+    setFrame: (frameId) =>
+        @clock = 0
+        @currentFrameId = frameId
+        @_updateFrame!
+
     _updateFrame: =>
-        fX = @currentFrameId % @frameCount.columns
-        fY = math.floor(@currentFrameId / @frameCount.columns)
+        id = @currentFrameId - 1
+        fX = id % @frameCount.columns
+        fY = math.floor(id / @frameCount.columns)
         @quad\setViewport(fX * @frame.width, fY * @frame.height, @frame.width, @frame.height)

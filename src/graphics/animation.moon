@@ -38,6 +38,7 @@ export class Animation extends Image
         @isPlaying = true
 
     _updateFrame: =>
-        fX = @currentTrack.currentFrame.id % @frameCount.columns
-        fY = math.floor(@currentTrack.currentFrame.id / @frameCount.columns)
+        id = @currentTrack.currentFrame.id
+        fX = id % @frameCount.columns
+        fY = math.floor(id / @frameCount.columns)
         @quad\setViewport(fX * @frame.width, fY * @frame.height, @frame.width, @frame.height)

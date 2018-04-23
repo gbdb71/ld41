@@ -6,6 +6,7 @@ love.load = ->
 
     Settings.stdFont = love.graphics.newFont(Settings.fonts["04b03"], 8)
     Settings.turnAnnouncerFont = love.graphics.newFont(Settings.fonts["04b03"], 16)
+    Settings.gemCountFont = love.graphics.newFont(Settings.fonts["04b03"], 8)
 
     -- util
     m = require "util/math"

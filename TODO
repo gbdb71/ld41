@@ -5,7 +5,8 @@ x Tween
 x Component
 x Utils
 x Math
-- Atlas
-- Animation
-- Tileset
-- Simple intersection tests
+! Atlas
+x Animation
+x Tileset
+x Simple intersection tests
+- Z-sorting

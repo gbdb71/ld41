@@ -64,12 +64,21 @@ export class GameplayScene extends Scene
         @hasRoomEnded = false
         @changeRoomTimer = 0
 
+        -- ui
+        require "systems/ui"
+        @ui = UI!
+        @addEntity(@ui)
+
         @clock = 0
 
     enter: =>
         super!
+
+        -- first grid load
         if (not @grid.isLoaded)
             @nextRoom("test")
+            @ui.maxHearts = @player.maxHealth
+            @ui\setHeart(@player.maxHealth)
 
     leave: =>
         super!
