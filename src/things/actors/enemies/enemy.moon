@@ -9,7 +9,7 @@ export class Enemy extends Actor
         @isPlanning = false
         @hasFinishedPlanning = false
         @endPlanTimer = 0
-        @planningTime = .5
+        @planningTime = Settings.enemyDefaultPlanningTime
         @attackRange = {}
         @movementRange = {}
 
@@ -17,7 +17,7 @@ export class Enemy extends Actor
         super(dt)
 
     gridDraw: (gridX, gridY, cellsOpacity) =>
-        if (not @isWaiting)
+        if (not @isWaiting or not @isAlive)
             return
 
         x = 0
@@ -36,7 +36,7 @@ export class Enemy extends Actor
 
             @@attackRangeMarker.opacity = cellsOpacity
             @@attackRangeMarker\draw(gridX + (x - 1) * Settings.tileSize.width, gridY + (y - 1) * Settings.tileSize.height)
-            
+
             for i = 1, 3
                 @@attackRangeMarker.color[i] = 1
 
@@ -44,6 +44,9 @@ export class Enemy extends Actor
     --turn
     startTurn: (turn) =>
         super(turn)
+        if (not @isAlive)
+            return
+
         @plan(@planningTime)
 
     updateTurn: (dt, turn) =>
@@ -55,14 +58,17 @@ export class Enemy extends Actor
                 @isPlanning = false
                 @executePlan!
                 @hasFinishedPlanning = false
-                @finishTurn!
 
+    endTurn: (turn) =>
+        if (not @isAlive)
+            @canTurn = false
 
     -- health
     onDeath: =>
         print "#{@@__name} death"
         cell = @currentCell!
         cell.thing = nil
+        @canTurn = false
 
 
     -- planning

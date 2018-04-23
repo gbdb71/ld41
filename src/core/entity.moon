@@ -80,3 +80,7 @@ export class Entity
 
     removeSelf: =>
         @scene\removeEntity(@)
+
+
+    toString: =>
+        "#{@@__name}, scene: #{@scene.__class.__name}"

@@ -116,5 +116,6 @@ settings.changeRoomDelay = 2
 
 -- enemies
 settings.enemyAttackRangeOnPlayerMarkerColor = { Lume.color("#e14141") }
+settings.enemyDefaultPlanningTime = .3
 
 return settings

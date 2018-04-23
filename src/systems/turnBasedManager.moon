@@ -72,9 +72,6 @@ export class TurnBasedManager
 
 
     start: (turn=1) =>
-        if (@hasStarted)
-            @reset!
-
         @hasStarted = true
         @inTurnTransition = true
         @_updateCurrentTurn(turn)
@@ -92,6 +89,9 @@ export class TurnBasedManager
         @previousTurn = nil
         @currentTurn = nil
         @canChangeTurn = true
+
+        for _, turn in pairs @turns
+            turn\clear!
 
         -- turn transition
         @inTurnTransition = false

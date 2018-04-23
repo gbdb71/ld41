@@ -16,9 +16,19 @@ export class Player extends Actor
             \addTrack("jump", "5-7", 130)
             \play("idle")
 
-        with @attackGraphic = ImageSet("#{Settings.folders.graphics}/player_attack.png", 22, 22)
-            .frameDuration = .050
+        with @attackGraphic = ImageSet("#{Settings.folders.graphics}/player_attack.png", 18, 19)
+            .origin.x = 11
+            .origin.y = 12
+            .frameDuration = .080
             .callbacks.onEnd = -> @attackedEnemy\takeDamage(@damage)
+
+        @attackTween = nil
+        @playingAttackTween = false
+
+        @attackOrigin = {
+            right: { x: 3, y: -13 }
+            left: { x: -3, y: -13 }
+        }
 
         -- movement
         with @movement = @addComponent(Movement(100, 100, 300, 300))
@@ -29,7 +39,8 @@ export class Player extends Actor
 
             .callbacks.onEndMove = ->
                 @graphic\play("idle")
-                @attack!
+                if (not @attack!)
+                    @finishTurn!
 
         -- attack
         @attackedEnemy = nil
@@ -40,33 +51,41 @@ export class Player extends Actor
         if (@attackGraphic.isPlaying)
             @attackGraphic\update(dt)
 
+        if (@playingAttackTween)
+            if (@attackTween\update(dt))
+                @playingAttackTween = false
+                @finishTurn!
+
     draw: =>
         super!
-        --if (@lastAttackX != nil)
-        --    love.graphics.rectangle("fill", @lastAttackX - 16, @lastAttackY - 16, 16, 16)
-
-        if (@attackGraphic.isPlaying)
-            if (@graphic.flip.h)
-                @attackGraphic\draw(@x - 3, @y - 15)
-            else
-                @attackGraphic\draw(@x + 3, @y - 15)
+        if (@playingAttackTween)
+            @attackGraphic\draw!
 
 
     attack: =>
-        faceX, faceY = Helper.directionToVector(@faceDirection)
-        facingCell = @scene.grid\cellAt(@currentGrid.x + faceX, @currentGrid.y + faceY)
+        attackedCell = @facingCell!
 
-        if (facingCell == nil or facingCell.thing == nil)
+        if (attackedCell == nil)
             return false
 
-        --@lastAttackX, @lastAttackY = @scene.grid\transformToPos(@currentGrid.x + faceX, @currentGrid.y + faceY)
+        if (attackedCell\hasEnemy!)
+            --facingCell.thing\takeDamage(@damage)
+            @attackedEnemy = attackedCell.thing
+            @attackGraphic\play!
 
-        switch (facingCell.thing.__class.__parent.__name)
-            when "Enemy"
-                --facingCell.thing\takeDamage(@damage)
-                @attackedEnemy = facingCell.thing
-                @attackGraphic\play!
-                return true
+            -- tween
+            @playingAttackTween = true
+
+            local attackOrigin
+            if (@graphic.flip.h)
+                attackOrigin = @attackOrigin.right
+            else
+                attackOrigin = @attackOrigin.left
+
+            @attackGraphic.x = @x + attackOrigin.x
+            @attackGraphic.y = @y + attackOrigin.y
+            @attackTween = Tween.new(.7, @attackGraphic, { x: @attackedEnemy.x, y: @attackedEnemy.y }, "outCubic")
+            return true
 
         return false
 

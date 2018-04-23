@@ -65,6 +65,6 @@ export class Locker
     toString: =>
         str = "#{@count!}\n"
         for i, v in ipairs @values
-            str ..= "  #{i}   #{v.__class.__name}\n"
+            str ..= "  #{i}   #{v\toString!}\n"
 
         return str

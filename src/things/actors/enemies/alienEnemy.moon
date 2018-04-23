@@ -22,8 +22,34 @@ export class AlienEnemy extends Enemy
             { -1,  0 }
         }
 
-        @movement = @addComponent(Movement(100, 100, 300, 300))
+        with @movement = @addComponent(Movement(100, 100, 300, 300))
+            .callbacks.onEndMove = ->
+                if (not @attack!)
+                    @finishTurn!
+
+        -- attack
+        @damage = 1
+        @performingAttack = false
+        @attacked = nil
+
+        -- attack tween
+        @attackTween = nil
+        @playingAttackTween = false
+        @attackTweenDir = 1
+        @attackMoveDistance = 14
+
         @nextMove = x: 0, y: 0
+
+    update: (dt) =>
+        super(dt)
+        if (@playingAttackTween)
+            if (@attackTween\update(dt * @attackTweenDir))
+                if (@attackTweenDir > 0)
+                    @attackTweenDir *= -1
+            elseif (@attackTween.clock <= 0)
+                @playingAttackTween = false
+                @attacked\takeDamage(@damage)
+                @finishTurn!
 
     draw: =>
         super!
@@ -39,7 +65,25 @@ export class AlienEnemy extends Enemy
     -- planning
     plan: (time) =>
         super(time)
-        @nextMove.x, @nextMove.y = @getRandomMove!
+
+        local playerCell
+
+        -- try to find if player is on a neighbor cell
+        -- moving bias to player
+        for _, attackRange in pairs @attackRange
+            cell = @neighborCell(attackRange[1], attackRange[2])
+            if (not cell\hasPlayer!)
+                continue
+
+            playerCell = cell
+            @nextMove.x, @nextMove.y = attackRange[1], attackRange[2]
+            break
+
+        -- if doesn't player had found, move to a random direction
+        if (playerCell == nil)
+            @nextMove.x, @nextMove.y = @getRandomMove!
+
+        --@nextMove.x, @nextMove.y = 0, 0
         @hasFinishedPlanning = true
 
     onThink: (dt) =>
@@ -47,5 +91,35 @@ export class AlienEnemy extends Enemy
 
     executePlan: =>
         super!
-        if (@nextMove.x != 0 or @nextMove.y != 0)
-            @move(@nextMove.x, @nextMove.y)
+        if (not @move(@nextMove.x, @nextMove.y) and not @playingAttackTween)
+            @finishTurn!
+
+    -- attack
+    attack: =>
+        attackedCell = @facingCell!
+
+        if (attackedCell == nil or attackedCell.thing == nil)
+            return false
+
+        if (attackedCell\hasPlayer!)
+            @attacked = attackedCell.thing
+
+            faceX, faceY = Helper.directionToVector(@faceDirection)
+            attackX = @x + faceX * @attackMoveDistance
+            attackY = @y + faceY * @attackMoveDistance
+            @attackTween = Tween.new(.2, @, { x: attackX, y: attackY }, "inCubic")
+            @playingAttackTween = true
+            @attackTweenDir = 1
+            return true
+
+        return false
+
+
+    onCollideThing: (thing) =>
+        switch (thing.__class.__parent.__name)
+            when "Player"
+                -- attack
+                @attack!
+                return true
+
+        return false

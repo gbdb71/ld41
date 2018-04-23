@@ -19,12 +19,15 @@ export class Turn
             return
 
         for _, thing in ipairs @things
+            if (not thing.canTurn)
+                continue
+
             thing\updateTurn(dt, @)
 
         -- check if turn has ended
         turnEnded = true
         for _, thing in ipairs @things
-            if (not thing.hasEndedTurn)
+            if (thing.canTurn and not thing.hasEndedTurn)
                 turnEnded = false
                 break
 
@@ -40,11 +43,17 @@ export class Turn
         @isPlaying = false
         @callbacks.onEndTurn(@)
         for _, thing in ipairs @things
+            if (not thing.canTurn)
+                continue
+
             thing\endTurn(@)
 
     play: =>
         @isPlaying = true
         for _, thing in ipairs @things
+            if (not thing.canTurn)
+                continue
+
             thing.hasEndedTurn = false
             thing\startTurn(@)
 

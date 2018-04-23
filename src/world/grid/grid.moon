@@ -214,7 +214,7 @@ export class Grid extends Entity
         math.floor((x - @x) / @cell.width) + 1, math.floor((y - @y) / @cell.height) + 1
 
     transformToPos: (gridX, gridY) =>
-        @x + gridX * @cell.width, @y + gridY * @cell.height
+        @x + (gridX - 1) * @cell.width, @y + (gridY - 1) * @cell.height
 
     hide: =>
         if (@opacityTweenDir == -1)

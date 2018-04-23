@@ -21,6 +21,7 @@ export class Actor extends Entity
         -- turn
         @isWaiting = true
         @hasEndedTurn = false
+        @canTurn = true
 
 
     sceneAdded: (scene) =>
@@ -209,6 +210,14 @@ export class Actor extends Entity
     currentCell: =>
         @scene.grid\cellAt(@currentGrid.x, @currentGrid.y)
 
+    neighborCell: (x, y) =>
+        @scene.grid\cellAt(@currentGrid.x + x, @currentGrid.y + y)
+
+    facingCell: =>
+        faceX, faceY = Helper.directionToVector(@faceDirection)
+        @neighborCell(faceX, faceY)
+
+    -- collision
     onCollideCell: (cell) =>
         if (cell == nil or not cell.walkable)
             return true

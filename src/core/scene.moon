@@ -20,8 +20,6 @@ export class Scene
         @entities\unlock!
 
     beforeUpdate: =>
-        @entities\keep!
-
         @entities\lock!
         for _, entity in ipairs @entities.values
             if (not entity.active or entity.scene != @)
@@ -51,6 +49,8 @@ export class Scene
 
         @entities\unlock!
 
+        @entities\keep!
+
 
     draw: =>
         --for _, graphic in ipairs @graphics.values
@@ -74,6 +74,9 @@ export class Scene
         entity\sceneAdded(@)
 
     removeEntity: (entity) =>
+        if (entity.scene != @)
+            return
+
         if (@entities\remove(entity))
             entity\sceneRemoved!
 

@@ -103,14 +103,11 @@ export class GameplayScene extends Scene
 
             else if (love.keyboard.isDown(keyboard["movement"].left[1]) or love.keyboard.isDown(keyboard["movement"].left[2]))
                 move.x = -1
-                @player.gems += 100
             else if (love.keyboard.isDown(keyboard["movement"].right[1]) or love.keyboard.isDown(keyboard["movement"].right[2]))
                 move.x = 1
-                @player.gems += 500
 
             if (move.x != 0 or move.y != 0)
-                if (@player\move(move.x, move.y))
-                    @player\finishTurn!
+                @player\move(move.x, move.y)
 
     update: (dt) =>
         @clock += dt
@@ -163,6 +160,7 @@ export class GameplayScene extends Scene
                 for _, entity in ipairs entityList
                     @removeEntity(entity)
 
+            @turnManager\reset!
 
         @grid\load("#{Settings.folders.maps}/#{nextRoomFilename}")
         @turnManager\start!
