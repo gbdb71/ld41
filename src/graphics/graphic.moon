@@ -21,4 +21,4 @@ export class Graphic
 
         love.graphics.draw(@texture, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
 
-        love.graphics.setColor(r, g, b, a)
+        love.graphics.setColor(cr, cg, cb, ca)

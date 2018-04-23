@@ -10,8 +10,11 @@ x Animation
 x Tileset
 x Simple intersection tests
 x UI
-- Increase possible things on tile
 - Enemies
+    - Alien
+    - Flower
+    - Bat
+- Increase possible things on tile
 - Projectiles
 - Better room switch transition
 - Pickups

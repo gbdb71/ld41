@@ -1,7 +1,14 @@
 export class Player extends Actor
     new: =>
         super(3)
+
+        -- damage
         @damage = 1
+
+        -- gems
+        @gems = 0
+
+        -- graphics
         with @graphic = Animation("#{Settings.folders.graphics}/player.png", 17, 24)
             .origin.x = 8
             .origin.y = 19
@@ -13,6 +20,7 @@ export class Player extends Actor
             .frameDuration = .050
             .callbacks.onEnd = -> @attackedEnemy\takeDamage(@damage)
 
+        -- movement
         with @movement = @addComponent(Movement(100, 100, 300, 300))
             .callbacks.onStartMove = ->
                 @graphic\play("jump")
@@ -23,6 +31,7 @@ export class Player extends Actor
                 @graphic\play("idle")
                 @attack!
 
+        -- attack
         @attackedEnemy = nil
 
 

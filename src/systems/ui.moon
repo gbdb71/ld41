@@ -39,7 +39,7 @@ export class UI extends Entity
         super!
 
         -- hearts
-        x = 15
+        x = 8
         for i = 0, @maxHearts - 1
             if (@hearts - 1 >= i)
                 @heart\setFrame(1) -- full heart
@@ -62,6 +62,9 @@ export class UI extends Entity
         @hearts = Lume.clamp(amount, 0, @maxHearts)
 
     setGem: (amount) =>
+        if (@gems == amount)
+            return
+
         @initialGems = @gems
         @gems = amount
         diff = @gems - @initialGems

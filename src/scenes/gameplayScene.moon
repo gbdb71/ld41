@@ -103,10 +103,10 @@ export class GameplayScene extends Scene
 
             else if (love.keyboard.isDown(keyboard["movement"].left[1]) or love.keyboard.isDown(keyboard["movement"].left[2]))
                 move.x = -1
-                @ui\addGem(100)
+                @player.gems += 100
             else if (love.keyboard.isDown(keyboard["movement"].right[1]) or love.keyboard.isDown(keyboard["movement"].right[2]))
                 move.x = 1
-                @ui\addGem(500)
+                @player.gems += 500
 
             if (move.x != 0 or move.y != 0)
                 if (@player\move(move.x, move.y))
@@ -120,8 +120,15 @@ export class GameplayScene extends Scene
 
     lateUpdate: =>
         super!
+
+        -- UI
+        @ui\setHeart(@player.health)
+        @ui\setGem(@player.gems)
+
+        -- turn manager
         @turnManager\lateUpdate!
 
+        -- room change
         if (@canChangeRoom)
             if (not @hasRoomEnded)
                 someoneAlive = false

@@ -12,5 +12,5 @@ export class Text extends Graphic
             love.graphics.draw(@text, @quad, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
         else
             love.graphics.draw(@text, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
-            
-        love.graphics.setColor(r, g, b, a)
+
+        love.graphics.setColor(cr, cg, cb, aa)
