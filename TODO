@@ -10,11 +10,18 @@ x Animation
 x Tileset
 x Simple intersection tests
 x UI
+- Increase possible things on tile
 - Enemies
+- Projectiles
 - Better room switch transition
 - Pickups
 - EndScenes
     - Victory
     - Defeat
-
+- Audio
+-------------
 - Z-sorting
+- Doors working
+- [Bug] Map tile rotation not working properly
+-------------
+- More polish

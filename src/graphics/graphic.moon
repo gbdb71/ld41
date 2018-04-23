@@ -8,6 +8,7 @@ export class Graphic
         @origin = x: 0, y: 0
         @shearing = x: 0, y: 0
         @opacity = 1
+        @color = { 255, 255, 255 }
 
     update: (dt) =>
 
@@ -15,6 +16,9 @@ export class Graphic
         if (@texture == nil)
             return
 
-        love.graphics.setColor(255, 255, 255, @opacity)
+        cr, cg, cb, ca = love.graphics.getColor!
+        love.graphics.setColor(@color[1], @color[2], @color[3], @opacity)
+
         love.graphics.draw(@texture, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
-        love.graphics.setColor(255, 255, 255, 255)
+
+        love.graphics.setColor(r, g, b, a)

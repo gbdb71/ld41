@@ -114,4 +114,7 @@ settings.turns = {
 -- rooms
 settings.changeRoomDelay = 2
 
+-- enemies
+settings.enemyAttackRangeOnPlayerMarkerColor = { Lume.color("#e14141") }
+
 return settings

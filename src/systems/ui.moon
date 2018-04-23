@@ -33,6 +33,7 @@ export class UI extends Entity
                 @playingGemTween = false
 
             @showGems = Lume.round(Lume.lerp(@initialGems, @gems, @gemTweenProgress))
+            @gemText.text\set("#{@showGems}")
 
     draw: =>
         super!
@@ -65,7 +66,7 @@ export class UI extends Entity
         @gems = amount
         diff = @gems - @initialGems
         @gemTweenProgress = 0
-        @gemAddTween = Tween.new(0.2 + (diff / 100.0) * .5, @, { gemTweenProgress: 1.0 })
+        @gemAddTween = Tween.new(.1 + (diff / 100.0) * .05, @, { gemTweenProgress: 1.0 })
         @playingGemTween = true
 
     addGem: (amount) =>

@@ -9,10 +9,12 @@ export class Image extends Graphic
         sx *= -1 if @flip.h
         sy *= -1 if @flip.v
 
-        love.graphics.setColor(255, 255, 255, @opacity)
+        cr, cg, cb, ca = love.graphics.getColor!
+        love.graphics.setColor(@color[1], @color[2], @color[3], @opacity)
+
         if (@quad != nil)
             love.graphics.draw(@texture, @quad, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
-            return
+        else
+            love.graphics.draw(@texture, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
 
-        love.graphics.draw(@texture, @x + x, @y + y, r, sx, sy, ox, oy, kx, ky)
-        love.graphics.setColor(255, 255, 255, 255)
+        love.graphics.setColor(cr, cg, cb, ca)

@@ -11,6 +11,9 @@ export class GameplayScene extends Scene
         require "things/actors/enemies/batEnemy"
         require "things/actors/enemies/flowerEnemy"
 
+        if (Enemy.attackRangeMarker == nil)
+            Enemy.attackRangeMarker = Image("#{Settings.folders.graphics}/enemy_range.png")
+
         -- player
         require "things/actors/player/player"
         @player = nil
@@ -100,8 +103,10 @@ export class GameplayScene extends Scene
 
             else if (love.keyboard.isDown(keyboard["movement"].left[1]) or love.keyboard.isDown(keyboard["movement"].left[2]))
                 move.x = -1
+                @ui\addGem(100)
             else if (love.keyboard.isDown(keyboard["movement"].right[1]) or love.keyboard.isDown(keyboard["movement"].right[2]))
                 move.x = 1
+                @ui\addGem(500)
 
             if (move.x != 0 or move.y != 0)
                 if (@player\move(move.x, move.y))

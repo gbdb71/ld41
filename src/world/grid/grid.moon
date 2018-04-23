@@ -83,6 +83,10 @@ export class Grid extends Entity
 
                 love.graphics.draw(@gridCellGraphic, @gridCellQuad, @x + pos.x, @y + pos.y)
 
+                -- give a chance to anything draw on grid (example: markers)
+                if (cell.thing != nil and cell.thing.gridDraw != nil)
+                    cell.thing\gridDraw(@x, @y, @cellsOpacity)
+
 
         love.graphics.setColor(1, 1, 1, 1)
 

@@ -73,6 +73,7 @@ export class Actor extends Entity
         love.graphics.setColor(1, 1, 1, .7)
 
 
+    -- turn
     startTurn: (turn) =>
         @isWaiting = false
 
@@ -88,6 +89,7 @@ export class Actor extends Entity
         @isWaiting = true
 
 
+    -- movement
     move: (x, y) =>
         if (@isMoving or (x == 0 and y == 0))
             return false

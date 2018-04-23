@@ -8,11 +8,44 @@ export class AlienEnemy extends Enemy
             \addTrack("death", "5-10", 130)
             \play("walk")
 
+        @attackRange = {
+            {  0, -1 }
+            {  1,  0 }
+            {  0,  1 }
+            { -1,  0 }
+        }
+
+        @movementRange = {
+            {  0, -1 }
+            {  1,  0 }
+            {  0,  1 }
+            { -1,  0 }
+        }
+
+        @movement = @addComponent(Movement(100, 100, 300, 300))
+        @nextMove = x: 0, y: 0
+
+    draw: =>
+        super!
+        if (not @isAlive)
+            return
+
+    -- health
     onDeath: =>
-        print "#{@@__name} death"
+        super!
         @graphic\play("death")
 
 
-    updateTurn: (dt, turn) =>
-        super(dt, turn)
-        @finishTurn!
+    -- planning
+    plan: (time) =>
+        super(time)
+        @nextMove.x, @nextMove.y = @getRandomMove!
+        @hasFinishedPlanning = true
+
+    onThink: (dt) =>
+        super(dt)
+
+    executePlan: =>
+        super!
+        if (@nextMove.x != 0 or @nextMove.y != 0)
+            @move(@nextMove.x, @nextMove.y)
