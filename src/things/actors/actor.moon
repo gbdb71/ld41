@@ -146,7 +146,7 @@ export class Actor extends Entity
         if (@graphic != nil)
             faceX, faceY = Helper.directionToVector(@faceDirection)
             if (faceX != 0)
-                @graphic.flip.h = (faceX < 0)
+                @graphic.flip.h = (faceX > 0)
 
 
     -- health
@@ -208,7 +208,7 @@ export class Actor extends Entity
         @scene.grid\cellAt(@currentGrid.x, @currentGrid.y)
 
     onCollideCell: (cell) =>
-        if (not cell.walkable)
+        if (cell == nil or not cell.walkable)
             return true
         elseif (cell.thing != nil and cell.thing.__class.__parent != nil)
             if (@onCollideThing(cell.thing))
