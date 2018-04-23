@@ -9,4 +9,12 @@ x Math
 x Animation
 x Tileset
 x Simple intersection tests
+x UI
+- Enemies
+- Better room switch transition
+- Pickups
+- EndScenes
+    - Victory
+    - Defeat
+
 - Z-sorting

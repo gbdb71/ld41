@@ -40,7 +40,6 @@ export class UI extends Entity
         -- hearts
         x = 15
         for i = 0, @maxHearts - 1
-            print i
             if (@hearts - 1 >= i)
                 @heart\setFrame(1) -- full heart
             else
@@ -59,7 +58,6 @@ export class UI extends Entity
 
 
     setHeart: (amount) =>
-        print @hearts, @maxHearts
         @hearts = Lume.clamp(amount, 0, @maxHearts)
 
     setGem: (amount) =>
