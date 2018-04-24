@@ -79,10 +79,10 @@ export class TurnBasedManager
         @_updateCurrentTurn(turn)
 
     pause: =>
-        @isPlaying = true
+        @isPlaying = false
 
     resume: =>
-        @isPlaying = false
+        @isPlaying = true
 
     reset: =>
         @hasStarted = false

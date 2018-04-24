@@ -181,12 +181,13 @@ export class GameplayScene extends Scene
         Settings.audio.content.music["theme"]\stop!
         @clearRoom!
         @grid.isLoaded = false
+        @player = nil
         @entities\clear!
 
 
     beforeUpdate: =>
         super!
-        if (not @turnManager.hasStarted or not @turnManager.isPlaying)
+        if (not @turnManager.hasStarted or not @turnManager.isPlaying or @playingRoomTransition)
             return
 
         if (not @player.isWaiting)
@@ -331,11 +332,15 @@ export class GameplayScene extends Scene
                     @hasRoomEnded = true
                     @changeRoomTimer = @clock + Settings.changeRoomDelay
             elseif (@clock >= @changeRoomTimer)
-                @turnManager\pause!
-                @roomTransitionGraphic = @roomTransitionInGraphic
-                @playingRoomTransition = true
-                @roomTransitionHasEnded = false
                 @canChangeRoom = false
+                nextRoomFilename = @grid.properties["nextRoom"] or nil
+                if (nextRoomFilename == nil)
+                    @playingRoomTransition = false
+                else
+                    @turnManager\pause!
+                    @roomTransitionGraphic = @roomTransitionInGraphic
+                    @playingRoomTransition = true
+                    @roomTransitionHasEnded = false
 
     draw: =>
         super!
@@ -396,6 +401,12 @@ export class GameplayScene extends Scene
         -- debug
         print @toString!
         print @turnManager\toString!
+
+        -- reset room transition
+        @roomTransitionInGraphic\play!
+        @roomTransitionOutGraphic\play!
+        @playingRoomTransition = false
+        @roomTransitionHasEnded = false
 
     callBadEnd: =>
         Settings.audio.content.music["theme"]\stop!
