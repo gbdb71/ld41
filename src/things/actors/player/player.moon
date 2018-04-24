@@ -4,6 +4,7 @@ export class Player extends Actor
 
         -- damage
         @damage = 1
+        @willTakeDamageAfterMoveTo = nil
 
         -- gems
         @gems = 0
@@ -14,6 +15,7 @@ export class Player extends Actor
             .origin.y = 19
             \addTrack("idle", "1-4", 130)\loop()
             \addTrack("jump", "5-7", 130)
+            \addTrack("death", "8-23", 130)\onEnd( -> @scene\callBadEnd! )
             \play("idle")
 
         with @attackGraphic = ImageSet("#{Settings.folders.graphics}/player_attack.png", 18, 19)
@@ -34,11 +36,22 @@ export class Player extends Actor
         with @movement = @addComponent(Movement(100, 100, 300, 300))
             .callbacks.onStartMove = ->
                 @graphic\play("jump")
+                Settings.audio.content.sfx["playerMove"]\play!
 
             .callbacks.onMoving = ->
 
             .callbacks.onEndMove = ->
                 @graphic\play("idle")
+                if (@willTakeDamageAfterMoveTo != nil)
+                    switch @willTakeDamageAfterMoveTo.__class.__name
+                        when "SeedBullet"
+                            @takeDamage(@willTakeDamageAfterMoveTo.damage)
+                            @willTakeDamageAfterMoveTo\die!
+
+                    @willTakeDamageAfterMoveTo = nil
+                    if (not @isAlive)
+                        return
+
                 if (not @attack!)
                     @finishTurn!
 
@@ -56,11 +69,24 @@ export class Player extends Actor
                 @playingAttackTween = false
                 @finishTurn!
 
+    lateUpdate: =>
+        super!
+        if (not @isAlive)
+            return
+
+        cell = @currentCell!
+        if (cell\hasPickup!)
+            cell.pickup\collect(@)
+
     draw: =>
         super!
         if (@playingAttackTween)
             @attackGraphic\draw!
 
+    -- health
+    onDeath: =>
+        Settings.audio.content.sfx["playerDeath"]\play!
+        @graphic\play("death")
 
     attack: =>
         attackedCell = @facingCell!
@@ -68,10 +94,11 @@ export class Player extends Actor
         if (attackedCell == nil)
             return false
 
-        if (attackedCell\hasEnemy!)
+        if (attackedCell\hasEnemy! and attackedCell.thing.canTakeDamage)
             --facingCell.thing\takeDamage(@damage)
             @attackedEnemy = attackedCell.thing
             @attackGraphic\play!
+            Settings.audio.content.sfx["laser"]\play!
 
             -- tween
             @playingAttackTween = true
@@ -91,13 +118,20 @@ export class Player extends Actor
 
 
     onCollideThing: (thing) =>
+        if (thing.__class.__name == "Chest")
+            thing\open!
+            return true
+
         switch (thing.__class.__parent.__name)
             when "Enemy"
+                if (thing.__class.__name == "SeedBullet")
+                    @willTakeDamageAfterMoveTo = thing
+                    return false
+
                 -- attack
                 @attack!
                 return true
-            --when "Pickup"
             else
                 print "'#{@@__name}' Collided with a undefined Thing '#{thing.__class.__name}' (parent: '#{thing.__parent.__class.__name}')"
 
-        return false
+        return true

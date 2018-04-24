@@ -11,20 +11,20 @@ x Tileset
 x Simple intersection tests
 x UI
 - Enemies
-    - Alien
-    - Flower
+    x Alien
+    x Flower
     - Bat
-- Increase possible things on tile
-- Projectiles
-- Better room switch transition
-- Pickups
-- EndScenes
-    - Victory
-    - Defeat
-- Audio
+x Increase possible things on tile
+x Projectiles
+x Better room switch transition
+x Pickups
+x Audio
+x EndScenes
+    x Victory
+    x Defeat
 -------------
 - Z-sorting
 - Doors working
-- [Bug] Map tile rotation not working properly
+? [Bug] Map tile rotation not working properly
 -------------
 - More polish

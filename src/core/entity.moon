@@ -83,4 +83,4 @@ export class Entity
 
 
     toString: =>
-        "#{@@__name}, scene: #{@scene.__class.__name}"
+        "#{@@__name}, scene: #{if @scene == nil then "nil" else     @scene.__class.__name}"

@@ -1,12 +1,22 @@
 love.load = ->
     -- font
-    Settings.fonts = {
-        "04b03": "#{Settings.folders.fonts}/04b03.ttf"
-    }
-
     Settings.stdFont = love.graphics.newFont(Settings.fonts["04b03"], 8)
     Settings.turnAnnouncerFont = love.graphics.newFont(Settings.fonts["04b03"], 16)
     Settings.gemCountFont = love.graphics.newFont(Settings.fonts["04b03"], 8)
+
+    -- audio
+    -- music
+    for name, filename in pairs Settings.audio.filenames.music
+        music = love.audio.newSource("#{Settings.folders.audio}/#{filename}", "static")
+        music\setVolume(.25)
+        Settings.audio.content.music[name] = music
+        music\setLooping(true)
+
+    -- sfx
+    for name, filename in pairs Settings.audio.filenames.sfx
+        sfx = love.audio.newSource("#{Settings.folders.audio}/#{filename}", "static")
+        sfx\setVolume(.4)
+        Settings.audio.content.sfx[name] = sfx
 
     -- util
     m = require "util/math"
@@ -35,6 +45,7 @@ love.load = ->
     -- game scenes
     require "scenes/introScene"
     require "scenes/gameplayScene"
+    require "scenes/defeatScene"
 
     require "core/game"
     with game = Game!
@@ -49,6 +60,7 @@ love.load = ->
         -- scenes
         \addScene("intro", IntroScene!)
         \addScene("gameplay", GameplayScene!)
+        \addScene("defeat", DefeatScene!)
 
         \start("gameplay")
     return

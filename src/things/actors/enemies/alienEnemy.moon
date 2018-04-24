@@ -101,7 +101,10 @@ export class AlienEnemy extends Enemy
         if (attackedCell == nil or attackedCell.thing == nil)
             return false
 
+        print "attack"
         if (attackedCell\hasPlayer!)
+            Settings.audio.content.sfx["alienAttack"]\play!
+            print "performing attack"
             @attacked = attackedCell.thing
 
             faceX, faceY = Helper.directionToVector(@faceDirection)
@@ -122,4 +125,4 @@ export class AlienEnemy extends Enemy
                 @attack!
                 return true
 
-        return false
+        return true

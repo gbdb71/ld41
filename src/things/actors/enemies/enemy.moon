@@ -67,7 +67,9 @@ export class Enemy extends Actor
     onDeath: =>
         print "#{@@__name} death"
         cell = @currentCell!
-        cell.thing = nil
+        if (cell != nil)
+            cell.thing = nil
+
         @canTurn = false
 
 
@@ -96,3 +98,46 @@ export class Enemy extends Actor
                 return 0, 0
 
         return randomMove[1], randomMove[2]
+
+    isLineOfSightVisibleTo: (cellX, cellY) =>
+        targetCell = @scene.grid\cellAt(cellX, cellY)
+        if (targetCell == nil)
+            error "isLineOfSightVisibleTo - Invalid cell (#{cellX}, #{cellY})"
+            return false
+
+        if (@currentGrid.x != cellX and @currentGrid.y != cellY)
+            return false
+
+        diffCell =
+            x: cellX - @currentGrid.x
+            y: cellY - @currentGrid.y
+
+        return @lineOfSightVisible(diffCell.x, diffCell.y)
+
+    lineOfSightVisible: (x, y) =>
+        dir =
+            x: Lume.clamp(x, -1, 1)
+            y: Lume.clamp(y, -1, 1)
+
+        x -= dir.x
+        y -= dir.y
+
+        if (x == 0 and y == 0)
+            return true
+
+        startCell =
+            x: dir.x
+            y: dir.y
+
+        endCell =
+            x: x
+            y: y
+
+        for cellY = startCell.y, endCell.y
+            for cellX = startCell.x, endCell.x
+                cell = @neighborCell(cellX, cellY)
+                if (cell == nil or not cell\isEmpty!)
+                    print "cell not empty", cellX, cellY
+                    return false
+
+        return true

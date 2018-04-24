@@ -9,6 +9,7 @@ export class Actor extends Entity
         @maxHealth = maxHealth
         @health = @maxHealth
         @isAlive = true
+        @canTakeDamage = true
 
         -- moving
         @movement = nil
@@ -29,8 +30,8 @@ export class Actor extends Entity
         @currentGrid.x, @currentGrid.y = @scene.grid\transformToGridPos(@x, @y)
         cell = @currentCell!
 
-        if (cell.thing != nil)
-            die!
+        if (cell == nil or cell.thing != nil)
+            @die!
             return
 
         cell.thing = @
@@ -69,18 +70,20 @@ export class Actor extends Entity
         if (@movement == nil or (@movement.targetPosition.x == 0 and @movement.targetPosition.y == 0))
             return
 
-        love.graphics.setColor(1, 0, 0, .7)
-        love.graphics.line(@x, @y, @movement.targetPosition.x, @movement.targetPosition.y)
-        love.graphics.setColor(1, 1, 1, .7)
+        --love.graphics.setColor(1, 0, 0, .7)
+        --love.graphics.line(@x, @y, @movement.targetPosition.x, @movement.targetPosition.y)
+        --love.graphics.setColor(1, 1, 1, .7)
 
 
     -- turn
     startTurn: (turn) =>
         @isWaiting = false
+        print "start #{@@__name} turn"
 
     updateTurn: (dt, turn) =>
 
     endTurn: (turn) =>
+        print "end #{@@__name} turn"
 
     finishTurn: =>
         if (@isWaiting)
@@ -216,6 +219,12 @@ export class Actor extends Entity
     facingCell: =>
         faceX, faceY = Helper.directionToVector(@faceDirection)
         @neighborCell(faceX, faceY)
+
+    dirToCell: (cellX, cellY) =>
+        if (cellX != @currentGrid.x and cellY != @currentGrid.y)
+            return { x: 0, y: 0 }
+
+        return { x: Lume.clamp((cellX - @currentGrid.x), -1, 1), y: Lume.clamp(cellY - @currentGrid.y, -1, 1) }
 
     -- collision
     onCollideCell: (cell) =>

@@ -51,36 +51,42 @@ export class GridTileLayer extends GridLayer
                 -- r = -90
                 -- sy = -1
 
-                scale = x: 1, y: 1
-                rotation = 0
-                if (tile.reflect.d)
-                    if (tile.reflect.h and tile.reflect.v)
-                        rotation = math.rad(-90)
-                        scale.y = -1
-                    elseif (tile.reflect.h)
-                        rotation = math.rad(90)
-                    elseif (tile.reflect.v)
-                        rotation = math.rad(90)
-                    else
-                        rotation = math.rad(90)
-                        scale.y = -1
-                elseif (tile.reflect.h and tile.reflect.v)
-                    scale.x = -1
-                    scale.y = -1
-                elseif (tile.reflect.h)
-                    scale.x = -1
-                elseif (tile.reflect.v)
-                    scale.y = -1
-
+                --scale = x: 1, y: 1
+                --rotation = 0
+                --if (tile.reflect.d)
+                 --   if (tile.reflect.h and tile.reflect.v)
+                  --      rotation = math.rad(-90)
+                   --     scale.y = -1
+                    --elseif (tile.reflect.h)
+                     --   rotation = math.rad(90)
+                    --elseif (tile.reflect.v)
+                        --rotation = math.rad(90)
+                    --else
+                        --rotation = math.rad(90)
+                        --scale.y = -1
+                --elseif (tile.reflect.h and tile.reflect.v)
+                    --scale.x = -1
+                    --scale.y = -1
+                --elseif (tile.reflect.h)
+                    --scale.x = -1
+                --elseif (tile.reflect.v)
+                    --scale.y = -1
                 love.graphics.draw(
                     @texture
                     tile.quad
-                    topLeftX + @x + (x - .5) * @cell.width
-                    topLeftY + @y + (y - .5) * @cell.height
-                    rotation
-                    scale.x, scale.y,
-                    @cell.width / 2, @cell.height / 2
+                    topLeftX + @x + x * @cell.width
+                    topLeftY + @y + y * @cell.height
                 )
+
+                --love.graphics.draw(
+                    --@texture
+                    --tile.quad
+                    --topLeftX + @x + (x - .5) * @cell.width
+                    --topLeftY + @y + (y - .5) * @cell.height
+                    --rotation
+                    --scale.x, scale.y,
+                    --@cell.width / 2, @cell.height / 2
+                --)
 
 
     setup: (columns, rows) =>

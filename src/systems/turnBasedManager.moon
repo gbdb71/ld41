@@ -4,6 +4,7 @@ export class TurnBasedManager
     new: =>
         @@instance = @
         @hasStarted = false
+        @isPlaying = false
 
         -- round
         @round = 1
@@ -34,7 +35,7 @@ export class TurnBasedManager
 
 
     update: (dt) =>
-        if (not @hasStarted)
+        if (not @hasStarted or not @isPlaying)
             return
 
         if (@currentTurn != nil)
@@ -64,7 +65,7 @@ export class TurnBasedManager
                 @currentTurn\startTurn!
 
     lateUpdate: =>
-        if (not @hasStarted)
+        if (not @hasStarted or not @isPlaying)
             return
 
         if (@currentTurn.hasEnded)
@@ -73,8 +74,15 @@ export class TurnBasedManager
 
     start: (turn=1) =>
         @hasStarted = true
+        @isPlaying = true
         @inTurnTransition = true
         @_updateCurrentTurn(turn)
+
+    pause: =>
+        @isPlaying = true
+
+    resume: =>
+        @isPlaying = false
 
     reset: =>
         @hasStarted = false

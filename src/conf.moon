@@ -9,7 +9,7 @@ love.conf = (t) ->
 
     t.identity = ""                                     -- The name of the save directory (string)
     t.version = "11.1"                                  -- The LÖVE version this game was made for (string)
-    t.console = true                                    -- Attach a console (boolean, Windows only)
+    t.console = false                                    -- Attach a console (boolean, Windows only)
 
     t.window.title = Settings.title                     -- The window title (string)
     t.window.icon = nil                                 -- Filepath to an image to use as the window's icon (string)

@@ -27,6 +27,7 @@ export class Grid extends Entity
         @things = {
             enemies: {}
             pickups: {}
+            projectiles: {}
         }
 
 
@@ -136,6 +137,8 @@ export class Grid extends Entity
                     layer = GridTileLayer(l.width, l.height)
                     layer.name = l.name
                     layer.visible = l.visible
+                    layer.x = -16
+                    layer.y = -16
                     layer\load(l.data, tileset)
 
                     Lume.push(@layers, layer)
@@ -144,6 +147,7 @@ export class Grid extends Entity
                         for y = 1, layer.rows
                             for x = 1, layer.columns
                                 tile = layer.tiles[y][x]
+
                                 @cells[y][x].walkable = (tile == nil)
 
                 when "objectgroup"
@@ -152,8 +156,6 @@ export class Grid extends Entity
                             continue
 
                         entity = nil
-                        isEnemy = false
-                        alreadyAdded = false
                         switch string.lower(object.type)
                             when "player"
                                 if (@scene.player == nil)
@@ -161,35 +163,36 @@ export class Grid extends Entity
                                     @scene.player = entity
                                 else
                                     entity = @scene.player
-                                    alreadyAdded = true
 
-                                TurnBasedManager.instance.turns[Settings.turns.player.id]\register(entity)
                                 print "added Player"
                             when "alien"
                                 entity = AlienEnemy!
-                                isEnemy = true
                                 print "added AlienEnemy"
                             when "flower"
                                 entity = FlowerEnemy!
-                                isEnemy = true
                                 print "added FlowerEnemy"
                             when "bat"
                                 entity = BatEnemy!
-                                isEnemy = true
                                 print "added BatEnemy"
+                            when "redgem"
+                                entity = Gem("red")
+                                print "added red gem"
+                            when "gem"
+                                entity = Gem!
+                                print "added gem"
+                            when "heart"
+                                entity = Heart!
+                                print "added heart"
+                            when "chest"
+                                entity = Chest!
+                                print "added chest"
                             else
                                 print "Unhandled object with type '#{object.type}' (at x: #{object.x}, y: #{object.y})."
                                 continue
 
-                        if (isEnemy)
-                            Lume.push(@things.enemies, entity)
-                            TurnBasedManager.instance.turns[Settings.turns.enemies.id]\register(entity)
+                        gridX, gridY = @transformToGridPos(@x + object.x + math.floor(object.width / 2), @y + object.y + math.floor(object.height / 2))
 
-                        entity.x = @x + object.x + math.floor(object.width / 2)
-                        entity.y = @y + object.y + math.floor(object.height / 2)
-                        --entity.visile = object.visible
-                        if (not alreadyAdded)
-                            @scene\addEntity(entity)
+                        @addThingToCell(gridX, gridY, entity)
                 else
                     print "Undefined grid layer type '#{l.type}'."
                     continue
@@ -209,6 +212,35 @@ export class Grid extends Entity
             return nil
 
         @cells[gridY][gridX]
+
+    addThingToCell: (gridX, gridY, thing) =>
+        cell = @cellAt(gridX, gridY)
+        if (cell == nil or not cell\isEmpty! or thing == nil)
+            return false
+
+        alreadyAdded = (thing.scene == @scene)
+        if (thing.scene != nil and thing.scene != @scene)
+            thing\removeSelf!
+
+        if (thing.__class.__name == "Player")
+            TurnBasedManager.instance.turns[Settings.turns.player.id]\register(thing)
+        elseif (thing.__class.__name == "SeedBullet")
+            Lume.push(@things.projectiles, thing)
+            TurnBasedManager.instance.turns[Settings.turns.projectiles.id]\register(thing)
+        elseif (thing.__class.__parent.__name == "Pickup")
+            Lume.push(@things.pickups, thing)
+        elseif (thing.__class.__parent.__name == "Enemy")
+            Lume.push(@things.enemies, thing)
+            TurnBasedManager.instance.turns[Settings.turns.enemies.id]\register(thing)
+
+        cellPosX, cellPosY = @transformToPos(gridX, gridY)
+        thing.x = cellPosX + math.floor(@cell.width / 2)
+        thing.y = cellPosY + math.floor(@cell.height / 2)
+
+        if (not alreadyAdded)
+            @scene\addEntity(thing)
+
+        return true
 
     transformToGridPos: (x, y) =>
         math.floor((x - @x) / @cell.width) + 1, math.floor((y - @y) / @cell.height) + 1

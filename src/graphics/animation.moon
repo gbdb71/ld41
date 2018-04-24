@@ -9,6 +9,7 @@ export class Animation extends Image
 
         @tracks = {}
         @currentTrack = nil
+        @currentTrackLabel = ""
         @isPlaying = false
 
     update: (dt) =>
@@ -30,6 +31,7 @@ export class Animation extends Image
             error "Track with label '#{label}' not found."
             return
 
+        @currentTrackLabel = label
         @currentTrack = @tracks[label]
         if (forceReset)
             @currentTrack\reset!
