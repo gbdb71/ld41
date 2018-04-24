@@ -22,7 +22,9 @@ export class Player extends Actor
             .origin.x = 11
             .origin.y = 12
             .frameDuration = .080
-            .callbacks.onEnd = -> @attackedEnemy\takeDamage(@damage)
+            .callbacks.onEnd = ->
+                @isAttacking = false
+                @attackedEnemy\takeDamage(@damage)
 
         @attackTween = nil
         @playingAttackTween = false
@@ -56,7 +58,8 @@ export class Player extends Actor
                     @finishTurn!
 
         -- attack
-        @attackedEnemy = nil
+        @isAttacking = false
+        --@attackedEnemy = nil
 
 
     update: (dt) =>
@@ -89,12 +92,16 @@ export class Player extends Actor
         @graphic\play("death")
 
     attack: =>
+        if (@isAttacking)
+            return
+
         attackedCell = @facingCell!
 
         if (attackedCell == nil)
             return false
 
         if (attackedCell\hasEnemy! and attackedCell.thing.canTakeDamage)
+            @isAttacking = true
             --facingCell.thing\takeDamage(@damage)
             @attackedEnemy = attackedCell.thing
             @attackGraphic\play!

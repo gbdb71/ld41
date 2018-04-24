@@ -62,7 +62,7 @@ love.load = ->
         \addScene("gameplay", GameplayScene!)
         \addScene("defeat", DefeatScene!)
 
-        \start("gameplay")
+        \start("intro")
     return
 
 love.update = (dt) ->
