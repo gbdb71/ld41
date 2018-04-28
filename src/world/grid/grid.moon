@@ -219,6 +219,7 @@ export class Grid extends Entity
             return false
 
         alreadyAdded = (thing.scene == @scene)
+        registerToCell = true
         if (thing.scene != nil and thing.scene != @scene)
             thing\removeSelf!
 
@@ -229,9 +230,12 @@ export class Grid extends Entity
             TurnBasedManager.instance.turns[Settings.turns.projectiles.id]\register(thing)
         elseif (thing.__class.__parent.__name == "Pickup")
             Lume.push(@things.pickups, thing)
+            registerToCell = false
         elseif (thing.__class.__parent.__name == "Enemy")
             Lume.push(@things.enemies, thing)
             TurnBasedManager.instance.turns[Settings.turns.enemies.id]\register(thing)
+        elseif (thing.__class.__name == "Chest")
+            registerToCell = false
 
         cellPosX, cellPosY = @transformToPos(gridX, gridY)
         thing.x = cellPosX + math.floor(@cell.width / 2)
@@ -239,6 +243,15 @@ export class Grid extends Entity
 
         if (not alreadyAdded)
             @scene\addEntity(thing)
+
+        -- cell registering
+        if (registerToCell)
+            if (thing.cell != nil)
+                thing.cell.thing = nil
+
+            cell.thing = thing
+            thing.currentGrid.x = gridX
+            thing.currentGrid.y = gridY
 
         return true
 

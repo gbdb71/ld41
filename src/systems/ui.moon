@@ -74,3 +74,11 @@ export class UI extends Entity
 
     addGem: (amount) =>
         @setGem(@gems + amount)
+
+    resetGems: =>
+        @showGems = 0
+        @gems = 0
+        @initialGems = 0
+        @gemTweenProgress = 0
+        @gemAddTween = nil
+        @playingGemTween = false

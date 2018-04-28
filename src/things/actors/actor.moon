@@ -53,7 +53,7 @@ export class Actor extends Entity
 
     lateUpdate: =>
         super!
-        @currentGrid.x, @currentGrid.y = @scene.grid\transformToGridPos(@x, @y)
+        --@currentGrid.x, @currentGrid.y = @scene.grid\transformToGridPos(@x, @y)
 
         if (not @isAlive)
             return
@@ -125,6 +125,8 @@ export class Actor extends Entity
         cell = @currentCell!
         cell.thing = nil
         nextCell.thing = @
+        @currentGrid.x = nextGrid.x
+        @currentGrid.y = nextGrid.y
         @isMoving = true
         @moveDirection.x = x
         @moveDirection.y = y

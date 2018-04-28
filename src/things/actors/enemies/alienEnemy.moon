@@ -22,7 +22,7 @@ export class AlienEnemy extends Enemy
             { -1,  0 }
         }
 
-        with @movement = @addComponent(Movement(100, 100, 300, 300))
+        with @movement = @addComponent(Movement(500, 500, 800, 800))
             .callbacks.onEndMove = ->
                 if (not @attack!)
                     @finishTurn!
@@ -42,6 +42,9 @@ export class AlienEnemy extends Enemy
 
     update: (dt) =>
         super(dt)
+        if (not @isAlive)
+            return
+
         if (@playingAttackTween)
             if (@attackTween\update(dt * @attackTweenDir))
                 if (@attackTweenDir > 0)
@@ -65,6 +68,8 @@ export class AlienEnemy extends Enemy
     -- planning
     plan: (time) =>
         super(time)
+        if (not @isAlive)
+            return
 
         local playerCell
 
@@ -91,11 +96,17 @@ export class AlienEnemy extends Enemy
 
     executePlan: =>
         super!
+        if (not @isAlive)
+            return
+
         if (not @move(@nextMove.x, @nextMove.y) and not @playingAttackTween)
             @finishTurn!
 
     -- attack
     attack: =>
+        if (not @isAlive)
+            return
+
         attackedCell = @facingCell!
 
         if (attackedCell == nil or attackedCell.thing == nil)
@@ -119,7 +130,7 @@ export class AlienEnemy extends Enemy
 
 
     onCollideThing: (thing) =>
-        switch (thing.__class.__parent.__name)
+        switch (thing.__class.__name)
             when "Player"
                 -- attack
                 @attack!

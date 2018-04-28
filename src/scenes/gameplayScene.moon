@@ -190,7 +190,7 @@ export class GameplayScene extends Scene
         if (not @turnManager.hasStarted or not @turnManager.isPlaying or @playingRoomTransition)
             return
 
-        if (not @player.isWaiting)
+        if (not @player.isWaiting and @player.isAlive)
             move = x: 0, y: 0
             keyboard = Settings.input.keyboard
 
@@ -241,6 +241,7 @@ export class GameplayScene extends Scene
                         @prepareRoom("start")
                         @ui.maxHearts = @player.maxHealth
                         @ui\setHeart(@player.maxHealth)
+                        @ui\resetGems!
                     else
                         @prepareRoom!
                 else

@@ -6,7 +6,7 @@ export class FlowerEnemy extends Enemy
             .origin.x = 13
             .origin.y = 18
             \addTrack("alive", "1-4", 130)\loop()
-            \addTrack("attack", "5-10", 130)\onEnd( ->
+            \addTrack("attack", "5-10", 40)\onEnd( ->
                 @releaseShoot!
                 @graphic\play("alive")
                 @finishTurn!
@@ -61,9 +61,12 @@ export class FlowerEnemy extends Enemy
     plan: (time) =>
         super(time)
 
-        if (@shoot != nil and @shoot.isAlive)
-            @hasFinishedPlanning = true
-            return false
+        if (not @isAlive)
+            return
+
+        --if (@shoot != nil and @shoot.isAlive)
+        --    @hasFinishedPlanning = true
+        --    return false
 
         -- prepare attack
         playerCell =
@@ -94,6 +97,9 @@ export class FlowerEnemy extends Enemy
 
     executePlan: =>
         super!
+        if (not @isAlive)
+            return
+
         if (@performingAttack and (@shootDirection.x != 0 or @shootDirection.y != 0))
             @attack(@shootDirection.x, @shootDirection.y)
             @waitTurnsToAttack = 1
@@ -102,8 +108,11 @@ export class FlowerEnemy extends Enemy
 
     -- attack
     attack: (x, y) =>
-        if (@shoot != nil and @shoot.isAlive)
-            return false
+        if (not @isAlive)
+            return
+
+        --if (@shoot != nil and @shoot.isAlive)
+        --    return false
 
         @graphic\play("attack")
         return true

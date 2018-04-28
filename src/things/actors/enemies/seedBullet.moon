@@ -11,7 +11,7 @@ export class SeedBullet extends Enemy
 
         @attackRange = {}
 
-        with @movement = @addComponent(Movement(500, 500, 800, 800))
+        with @movement = @addComponent(Movement(800, 800, 1500, 1500))
             .callbacks.onEndMove = ->
                 print "end move"
                 @finishTurn!
@@ -43,6 +43,9 @@ export class SeedBullet extends Enemy
 
     update: (dt) =>
         super(dt)
+        if (not @isAlive)
+            return
+
         if (@playingAttackTween)
             if (@attackTween\update(dt))
                 @playingAttackTween = false
@@ -88,10 +91,11 @@ export class SeedBullet extends Enemy
 
         if (attackedCell.thing != nil or not attackedCell.walkable)
             @attacked = attackedCell.thing
+            @currentCell!.thing = nil
 
             attackX = @x + @attackDirection.x * @attackMoveDistance
             attackY = @y + @attackDirection.y * @attackMoveDistance
-            @attackTween = Tween.new(.2, @, { x: attackX, y: attackY }, "inCubic")
+            @attackTween = Tween.new(.1, @, { x: attackX, y: attackY }, "inCubic")
             @playingAttackTween = true
             return true
 

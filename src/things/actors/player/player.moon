@@ -35,7 +35,7 @@ export class Player extends Actor
         }
 
         -- movement
-        with @movement = @addComponent(Movement(100, 100, 300, 300))
+        with @movement = @addComponent(Movement(250, 250, 800, 800))
             .callbacks.onStartMove = ->
                 @graphic\play("jump")
                 Settings.audio.content.sfx["playerMove"]\play!
